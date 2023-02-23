@@ -4,21 +4,15 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * This file is based on Thomas Vogt's init example.
  *
- * @author Thomas Vogt, thomas@thomas-vogt.de
+ * @author Lennart Schuster, Gabriel Wuwer, Georg Philip
  *
  * @brief ARM Cortex-M4 C-Entry Point.
  **/
 
 #include <stdint.h>
-
 #include "main.h"
-
-const char myConstString[] = "MY CONST STRING";
-
-char myModString[] = "MY MOD STRING";
-
-char myNotInitData[255];
 
 /**
  * @brief First C-Code startet from CPU initialisation.
@@ -40,10 +34,9 @@ __attribute__((used)) void SystemInit( void )
   zeroBss();
   copyData();
 
-  char myLocal[] = "XXX-TEST-XXX";
-
   main();
 
+  // Programm End
   for (;;);
 }
 
