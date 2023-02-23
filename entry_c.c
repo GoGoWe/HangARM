@@ -42,7 +42,7 @@ __attribute__((used)) void SystemInit( void )
 
   char myLocal[] = "XXX-TEST-XXX";
 
-  myMain();
+  main();
 
   for (;;);
 }

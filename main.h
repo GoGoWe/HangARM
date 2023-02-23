@@ -13,6 +13,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-void myMain( void );
+void main( void );
 
 #endif

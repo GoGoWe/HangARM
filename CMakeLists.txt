@@ -4,7 +4,7 @@
 #
 # Thomas Vogt, thomas@thomas-vogt.de
 
-cmake_minimum_required( VERSION 3.24 )
+cmake_minimum_required( VERSION 3.23 )
 
 project( arm_cortex_m4 LANGUAGES ASM C )
 
@@ -18,8 +18,9 @@ target_sources(
     entry_c.c
     main.h
     main.c
-    hal.h
-    hal.c )
+    #hal.h
+    #hal.c 
+    )
 
 target_link_options(
   testApp

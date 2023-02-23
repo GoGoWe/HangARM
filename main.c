@@ -18,7 +18,7 @@ static void setRegister( uint32_t address, uint32_t value );
 
 static uint32_t getRegister( uint32_t address );
 
-void myMain( void )
+void main( void )
 {
   uint32_t value1 = getRegister( 0x20001000 );
   setRegister( 0x20001000, 0xCAFEAFFE );
