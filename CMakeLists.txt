@@ -18,8 +18,8 @@ target_sources(
     entry_c.c
     main.h
     main.c
-    #hal.h
-    #hal.c 
+    hal.h
+    hal.c 
     )
 
 target_link_options(

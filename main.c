@@ -11,6 +11,7 @@
  **/
 
 #include "main.h"
+#include "hal.h"
 
 #include <stdint.h>
 
@@ -23,6 +24,9 @@ void main( void )
   uint32_t value1 = getRegister( 0x20001000 );
   setRegister( 0x20001000, 0xCAFEAFFE );
   uint32_t value2 = getRegister( 0x20001000 );
+
+  uartInit();
+  printStringWithLen("Hello, World", 12);
 }
 
 static void setRegister( uint32_t address, uint32_t value )
