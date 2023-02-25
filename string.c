@@ -14,18 +14,26 @@ int getLength(char* base) {
 	return i;
 }
 
-// to initialize a string16, nulls and calculates length
-string16 strinit(char* base) {
-	int l = getLength(base);
-	string16 s = {l, {*base}};
-	for (l; l > 127; l++) {
-		s.content[l] = 0;
+void strcpy(char *base, char *target) {
+	int i = 0;
+	while(base[i] != '\0') {
+		target[i] = base[i];
+		i++;
 	}
-	return s;
+}
+
+// to initialize a string16, nulls and calculates length
+void strinit(char *base, string128 *s) {
+	int l = getLength(base);
+	s->length = l;
+	strcpy(base, s->content);
+	for (int i = l; i < 127; i++) {
+		s->content[i] = 0;
+	}
 }
 
 // returns the first index of c in s, otherwise returns -1
-int strfind(const string16 s, const char c, int p) {
+int strfind(const string128 s, const char c, int p) {
 	int index = -1;
 	for (int p; p < s.length; p++) {
 		if (s.content[p] == c) {
@@ -36,14 +44,8 @@ int strfind(const string16 s, const char c, int p) {
 	return index;
 }
 
-enum strqal {
-	EQUAL = 1,
-	UNEQUAL = 0,
-	LENGTH_UNEQUAL = -1
-};
-
-// compares to strings
-int strqal(const string16 s1, const string16 s2) {
+// compares two strings
+int strqal(const string128 s1, const string128 s2) {
 	if (s1.length != s2.length) {
 		return LENGTH_UNEQUAL;
 	}

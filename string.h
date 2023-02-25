@@ -2,9 +2,23 @@
 
 typedef char buf[16];
 
-typedef struct string16 {
+typedef struct {
 	int length;
 	char content[128];
-} string16;
-int find(const string16 s, const char c, int p);
+} string128;
 
+int find(const string128 s, const char c, int p);
+
+void strcpy(char *base, char *target);
+
+void strinit(char* base, string128 *s);
+
+int strfind(const string128 s, const char c, int p);
+
+enum strqal {
+	EQUAL = 1,
+	UNEQUAL = 0,
+	LENGTH_UNEQUAL = -1
+};
+
+int strqal (const string128 s1, const string128 s2);
