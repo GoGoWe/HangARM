@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include "string.h"
+
 
 void clearTUI(void);
 
@@ -8,7 +10,7 @@ int charDigitToInt(const char c);
 
 // Converts a string {s} NUMBER to an valid integer
 // the should only have digits or the result will be inaccurat
-int stringDigitsToInt(const char * s, int len);
+int stringDigitsToInt(const string128 *s);
 
 
 // Converts a ONE DIGIT int {n} to an valid char number

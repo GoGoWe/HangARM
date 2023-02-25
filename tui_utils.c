@@ -11,13 +11,16 @@ int charDigitToInt(const char c)
     return c - ASCII_NUM_DIS;
 }
 
-int stringDigitsToInt(const char * s, int len)
+int stringDigitsToInt(const string128 *s)
 {
     int num = 0;
-    --len;
+	int length = s->length - 1;
+	int i = 0;
 
-    for(int i = 0; len >= 0; --len){
-        num += charDigitToInt(s[i]) * power(10, len);
+	while(length >= 0) {
+        num += charDigitToInt(s->content[i]) * power(10, length);
+		i++;
+		length--;
     }
 
     return num;
