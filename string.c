@@ -14,7 +14,7 @@ int getLength(char* base) {
 	return i;
 }
 
-void strcpy(char *base, char *target) {
+void strcopy(char *base, char *target) {
 	int i = 0;
 	while(base[i] != '\0') {
 		target[i] = base[i];
@@ -26,7 +26,7 @@ void strcpy(char *base, char *target) {
 void strinit(char *base, string128 *s) {
 	int l = getLength(base);
 	s->length = l;
-	strcpy(base, s->content);
+	strcopy(base, s->content);
 	for (int i = l; i < 127; i++) {
 		s->content[i] = 0;
 	}

@@ -9,7 +9,7 @@ typedef struct {
 
 int find(const string128 s, const char c, int p);
 
-void strcpy(char *base, char *target);
+void strcopy(char *base, char *target);
 
 void strinit(char* base, string128 *s);
 

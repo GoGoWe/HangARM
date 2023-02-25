@@ -19,12 +19,14 @@
 void main( void )
 {
   uartInit();
-  printString("Welcome to HangARM!");
+  string128 welcome;
+  strinit("Welcome to HangARM!\n\r", &welcome);
+  sendString(&welcome);
   char userInput;
   
   do{
-    userInput = readInput();
-    printChar(userInput);
+    userInput = readChar();
+    sendChar(userInput);
 
     int inputLen = getDigiCount(userInput);
     char AsciiValue[inputLen];
@@ -33,6 +35,6 @@ void main( void )
     //printStringWithLen(AsciiValue, inputLen);
 
   }while(userInput != '\r'); // Could also be solved with 10
-  printChar('\r');
+  sendChar('\n');
 
 }

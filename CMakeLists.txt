@@ -22,6 +22,8 @@ target_sources(
     hal.c 
     tui_utils.h
     tui_utils.c
+    string.h
+    string.c
     )
 
 target_link_options(

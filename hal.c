@@ -1,13 +1,11 @@
 #include "hal.h"
-#include "string.h"
-
 // Specific implementation for ARM-Cortex M4 here:
 
 void uartInit( void )
 {
   // Enable FIFO:
   // LCRH <-- LCRH_FEN
-  writeToRegister( DR, 0x10 );
+  writeToRegister( UARTDR, 0x10 );
 
   // TODO: Calculate Baudrate
   // Todo: Settings for 115200,8,n,1
@@ -15,30 +13,30 @@ void uartInit( void )
   // [9]    RXE   Receive enable
   // [8]    TXE   Transmit enable
   // [0] UARTEN   UART enable: 1-enable, 0-disable
-  writeToRegister( DR + 0x30, 0x00000031 );// Control
+  writeToRegister( UARTDR + 0x30, 0x00000031 );// Control
 }
 
-void printChar( const char c )
+void sendChar( const char c )
 {
-  WriteToRegister( 0x4000C000 + 0x00, c);
+  writeToRegister( 0x4000C000 + 0x00, c);
 }
 
-void sendString(string128 *s) {
+void sendString(const string128 *s) {
 	for (int i = 0; i < s->length; i++) {
-		writeToRegister(DR, s->content[i]);
+		writeToRegister(UARTDR, s->content[i]);
 	}
 }
 
-char read_input(void)
+char readChar(void)
 {
   uint32_t dataRegister;
 
   // FE = "FIFO EMPTY"
   // Active wait for not Empty fifo
-  while ( readFromRegister( DR + 0x18 ) & 0x10 );
+  while ( readFromRegister( UARTDR + 0x18 ) & 0x10 );
 
   // read from UART_O_DR
-  dataRegister = readFromRegister( DR + 0x00 );
+  dataRegister = readFromRegister( UARTDR + 0x00 );
 
   dataRegister = dataRegister & 0x000000FF;// sanitize
 
@@ -47,7 +45,7 @@ char read_input(void)
 
 // =================================================================================
 
-void writeToRegister(uint32_t a, uint32_t value)
+void writeToRegister(address a, uint32_t value)
 {
   uint32_t *pointer_to_address;
 
@@ -58,7 +56,7 @@ void writeToRegister(uint32_t a, uint32_t value)
   *pointer_to_address = value;
 }
 
-uint32_t readFromRegister(uint32_t a)
+uint32_t readFromRegister(address a)
 {
   uint32_t * pointer_to_address;
   uint32_t value;
