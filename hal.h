@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 typedef uint32_t address;
+const uint32_t DR = 0x4000C000;
 // for Init the UART:
 void uartInit(void);
 
@@ -12,6 +13,6 @@ void printStringWithLen(const char *text, int len);
 char read_input(void);
 
 // Generic Register-Access:
-void WriteToRegister( uint32_t address, uint32_t value);
+void writeToRegister( address a, uint32_t value);
 
-uint32_t ReadFromRegister(uint32_t address);
+uint32_t readFromRegister(address a);

@@ -1,4 +1,5 @@
 #include "hal.h"
+#include "string.h"
 
 // Specific implementation for ARM-Cortex M4 here:
 
@@ -6,7 +7,7 @@ void uartInit( void )
 {
   // Enable FIFO:
   // LCRH <-- LCRH_FEN
-  WriteToRegister( 0x4000C000, 0x10 );
+  writeToRegister( DR, 0x10 );
 
   // TODO: Calculate Baudrate
   // Todo: Settings for 115200,8,n,1
@@ -14,77 +15,54 @@ void uartInit( void )
   // [9]    RXE   Receive enable
   // [8]    TXE   Transmit enable
   // [0] UARTEN   UART enable: 1-enable, 0-disable
-  WriteToRegister( 0x4000C000 + 0x30, 0x00000031 );// Control
+  writeToRegister( DR + 0x30, 0x00000031 );// Control
 }
 
-void printString( const char *text )
-{
-
-  // Loop out the Data until zero reached!
-  for ( int n = 0; text[n] != 0; n++ )
-  {
-    WriteToRegister( 0x4000C000 + 0x00, text[n] );// Data
-  }
-
-  // Append \r\n, which results in a new line
-  WriteToRegister( 0x4000C000 + 0x00, '\r' );// Data
-  WriteToRegister( 0x4000C000 + 0x00, '\n' );// Data
+void sendString(string128 *s) {
+	for (int i = 0; i < s->length; i++) {
+		writeToRegister(DR, s->content[i]);
+	}
 }
 
-void printStringWithLen( const char *text, int len )
+char read_input(void)
 {
-  // Loop out the Data
-  for ( int n = 0; n < len; n++ )
-  {
-    WriteToRegister( 0x4000C000 + 0x00, text[n] );// Data
-  }
-
-  // Append \r\n, which results in a new line
-  WriteToRegister( 0x4000C000 + 0x00, '\r' );// Data
-  WriteToRegister( 0x4000C000 + 0x00, '\n' );// Data
-}
-
-// =================================================================================
-
-char read_input( void )
-{
-  uint32_t DataRegister;
+  uint32_t dataRegister;
 
   // FE = "FIFO EMPTY"
   // Active wait for not Empty fifo
-  while ( ReadFromRegister( 0x4000C000 + 0x18 ) & 0x10 )
+  while ( readFromRegister( DR + 0x18 ) & 0x10 )
     ;
 
-  // Read from UART_O_DR
-  DataRegister = ReadFromRegister( 0x4000C000 + 0x00 );
+  // read from UART_O_DR
+  dataRegister = readFromRegister( DR + 0x00 );
 
-  DataRegister = DataRegister & 0x000000FF;// sanitize
+  dataRegister = dataRegister & 0x000000FF;// sanitize
 
-  return (char)DataRegister;
+  return (char)dataRegister;
 }
 
 // =================================================================================
 
-void WriteToRegister( uint32_t address, uint32_t value )
+void writeToRegister(uint32_t a, uint32_t value)
 {
   uint32_t *pointer_to_address;
 
   // Assign pointer to given address:
-  pointer_to_address = (uint32_t *)address;
+  pointer_to_address = (uint32_t *)a;
 
-  // Write to the End of the Pointer
+  // write to the End of the Pointer
   *pointer_to_address = value;
 }
 
-uint32_t ReadFromRegister( uint32_t address )
+uint32_t readFromRegister(uint32_t a)
 {
   uint32_t * pointer_to_address;
   uint32_t value;
 
   // Assign pointer to given address:
-  pointer_to_address = (uint32_t *)address;
+  pointer_to_address = (uint32_t *)a;
 
-  // Read from the End of the Pointer
+  // read from the End of the Pointer
   value = *pointer_to_address;
 
   // Return the read value
