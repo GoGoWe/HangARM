@@ -13,7 +13,7 @@ void strcopy(char *base, char *target);
 
 void strinit(char* base, string128 *s);
 
-int strfind(const string128 s, const char c, int p);
+int strfind(const string128 *s, const char c, int p);
 
 enum strqal {
 	EQUAL = 1,
@@ -21,4 +21,4 @@ enum strqal {
 	LENGTH_UNEQUAL = -1
 };
 
-int strqal (const string128 s1, const string128 s2);
+int strqal (const string128 *s1, const string128 *s2);

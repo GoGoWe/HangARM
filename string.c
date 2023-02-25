@@ -37,10 +37,10 @@ void strinit(char *base, string128 *s) {
 }
 
 // returns the first index of c in s, otherwise returns -1
-int strfind(const string128 s, const char c, int p) {
+int strfind(const string128 *s, const char c, int p) {
 	int index = -1;
-	for (int p; p < s.length; p++) {
-		if (s.content[p] == c) {
+	for (int p; p < s->length; p++) {
+		if (s->content[p] == c) {
 			index = 0;
 			break;
 		}
@@ -49,12 +49,12 @@ int strfind(const string128 s, const char c, int p) {
 }
 
 // compares two strings
-int strqal(const string128 s1, const string128 s2) {
-	if (s1.length != s2.length) {
+int strqal(const string128 *s1, const string128 *s2) {
+	if (s1->length != s2->length) {
 		return LENGTH_UNEQUAL;
 	}
-	for (int i = 0; i < s1.length ; i++) {
-		if (s1.content[i] == s2.content[i]) {
+	for (int i = 0; i < s1->length ; i++) {
+		if (s1->content[i] == s2->content[i]) {
 			return EQUAL;
 		}
 	}
