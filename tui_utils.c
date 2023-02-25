@@ -11,7 +11,6 @@ int charDigitToInt(const char c)
     return c - ASCII_NUM_DIS;
 }
 
-
 int stringDigitsToInt(const string128 *s)
 {
     int num = 0;
