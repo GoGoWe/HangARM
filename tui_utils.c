@@ -26,19 +26,17 @@ int stringDigitsToInt(const string128 *s)
     return num;
 }
 
-char *intToText(int n, char * ca){
+void intToString(int n, string128 *s){
     int temp = 0;
     int len = getDigiCount(n);
 
     do{
         temp = n%10;
-        ca[len-1] = temp + 48;
+        s->content[len-1] = temp + 48;
 
         n = n/10;
         --len;
     }while(len != 0);
-
-    return ca;
 }
 
 int getDigiCount(int n){
@@ -52,8 +50,9 @@ int getDigiCount(int n){
 
 int power(int base, int exp)
 {
-    if(exp < 0)
-    return -1;
+    if(exp < 0) {
+		return -1;
+	}
 
     int result = 1;
     while (exp)

@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include "string.h"
 
-
 void clearTUI(void);
 
 // Converts a char {c} NUMBER to an valid integer
@@ -18,7 +17,7 @@ int stringDigitsToInt(const string128 *s);
 
 // TODO: There is an equevilant function needed like stringDigitsToInt
 // The same principle only dividing by 10 / modulu by 10
-char * intToText(int n, char * ca);
+void intToText(int n, string128 *s);
 
 int getDigiCount(int n);
 
