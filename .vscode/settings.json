@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.json": "json",
+        "stdint.h": "c"
+    },
+    "cmake.configureOnOpen": false
+}

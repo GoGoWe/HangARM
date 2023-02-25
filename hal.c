@@ -18,6 +18,11 @@ void uartInit( void )
   writeToRegister( DR + 0x30, 0x00000031 );// Control
 }
 
+void printChar( const char c )
+{
+  WriteToRegister( 0x4000C000 + 0x00, c);
+}
+
 void sendString(string128 *s) {
 	for (int i = 0; i < s->length; i++) {
 		writeToRegister(DR, s->content[i]);
@@ -30,8 +35,7 @@ char read_input(void)
 
   // FE = "FIFO EMPTY"
   // Active wait for not Empty fifo
-  while ( readFromRegister( DR + 0x18 ) & 0x10 )
-    ;
+  while ( readFromRegister( DR + 0x18 ) & 0x10 );
 
   // read from UART_O_DR
   dataRegister = readFromRegister( DR + 0x00 );
