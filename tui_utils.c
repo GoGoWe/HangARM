@@ -11,31 +11,33 @@ int charDigitToInt(const char c)
     return c - ASCII_NUM_DIS;
 }
 
-int stringDigitsToInt(const char * s, int len)
+
+int stringDigitsToInt(const string128 *s)
 {
     int num = 0;
-    --len;
+	int length = s->length - 1;
+	int i = 0;
 
-    for(int i = 0; len >= 0; --len){
-        num += charDigitToInt(s[i]) * power(10, len);
+	while(length >= 0) {
+        num += charDigitToInt(s->content[i]) * power(10, length);
+		i++;
+		length--;
     }
 
     return num;
 }
 
-char *intToText(int n, char * ca){
+void intToString(int n, string128 *s){
     int temp = 0;
     int len = getDigiCount(n);
 
     do{
         temp = n%10;
-        ca[len-1] = temp + 48;
+        s->content[len-1] = temp + 48;
 
         n = n/10;
         --len;
     }while(len != 0);
-
-    return ca;
 }
 
 int getDigiCount(int n){
