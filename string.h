@@ -9,7 +9,9 @@ typedef struct {
 
 int find(const string128 s, const char c, int p);
 
-void strcopy(char *base, char *target);
+void stradd(string128 *s, const char c);
+
+void strcopy(const char *base, char *target);
 
 void strinit(char* base, string128 *s);
 
