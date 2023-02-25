@@ -22,17 +22,22 @@ void main( void )
   string128 welcome;
   strinit("Welcome to HangARM!\n\r", &welcome);
   sendString(&welcome);
+
+  string128 input;
+  strinit("", &input);
   char userInput;
+  char *inputString;
   
   do{
     userInput = readChar();
     sendChar(userInput);
 
+    /*
     int inputLen = getDigiCount(userInput);
     char AsciiValue[inputLen];
     intToText((int)userInput, AsciiValue);
-
-    //printStringWithLen(AsciiValue, inputLen);
+    printStringWithLen(AsciiValue, inputLen);
+    */
 
   }while(userInput != '\r'); // Could also be solved with 10
   sendChar('\n');
