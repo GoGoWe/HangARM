@@ -51,8 +51,9 @@ int getDigiCount(int n){
 
 int power(int base, int exp)
 {
-    if(exp < 0)
-    return -1;
+    if(exp < 0) {
+		return -1;
+	}
 
     int result = 1;
     while (exp)

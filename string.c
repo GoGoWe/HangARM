@@ -14,11 +14,11 @@ int getLength(char* base) {
 	return i;
 }
 
-void stradd(string128 *base, char c) {
+void stradd(string128 *base, const char c) {
 	base->content[base->length] = c;
 }
 
-void strcopy(char *base, char *target) {
+void strcopy(const char *base, char *target) {
 	int i = 0;
 	while(base[i] != '\0') {
 		target[i] = base[i];
