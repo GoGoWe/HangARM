@@ -5,38 +5,34 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @author Thomas Vogt, thomas@thomas-vogt.de
+ * @author Lennart Schuster, Gabriel Wuwer, Georg Philip,
  *
  * @brief C Main.
  **/
 
 #include "main.h"
 #include "hal.h"
+#include "tui_utils.h"
 
 #include <stdint.h>
 
-static void setRegister( uint32_t address, uint32_t value );
-
-static uint32_t getRegister( uint32_t address );
-
 void main( void )
 {
-  uint32_t value1 = getRegister( 0x20001000 );
-  setRegister( 0x20001000, 0xCAFEAFFE );
-  uint32_t value2 = getRegister( 0x20001000 );
-
   uartInit();
-  printStringWithLen("Hello, World", 12);
-}
+  printString("Welcome to HangARM!");
+  char userInput;
+  
+  do{
+    userInput = readInput();
+    printChar(userInput);
 
-static void setRegister( uint32_t address, uint32_t value )
-{
-  uint32_t * const region = (uint32_t*)( address );
-  *region = value;
-}
+    int inputLen = getDigiCount(userInput);
+    char AsciiValue[inputLen];
+    intToText((int)userInput, AsciiValue);
 
-static uint32_t getRegister( uint32_t address )
-{
-  uint32_t const * const region = (uint32_t*)( address );
-  return *region;
+    //printStringWithLen(AsciiValue, inputLen);
+
+  }while(userInput != '\r'); // Could also be solved with 10
+  printChar('\r');
+
 }

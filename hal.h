@@ -5,11 +5,13 @@ typedef uint32_t address;
 void uartInit(void);
 
 // Outtput Routines:
+void printInt( const int);
+void printChar( const char );
 void printString(const char *text);
 void printStringWithLen(const char *text, int len);
 
 // Input Routines:
-char read_input(void);
+char readInput(void);
 
 // Generic Register-Access:
 void WriteToRegister( uint32_t address, uint32_t value);

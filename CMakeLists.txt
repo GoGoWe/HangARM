@@ -20,6 +20,8 @@ target_sources(
     main.c
     hal.h
     hal.c 
+    tui_utils.h
+    tui_utils.c
     )
 
 target_link_options(

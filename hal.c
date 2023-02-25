@@ -17,6 +17,11 @@ void uartInit( void )
   WriteToRegister( 0x4000C000 + 0x30, 0x00000031 );// Control
 }
 
+void printChar( const char c )
+{
+  WriteToRegister( 0x4000C000 + 0x00, c);
+}
+
 void printString( const char *text )
 {
 
@@ -46,14 +51,13 @@ void printStringWithLen( const char *text, int len )
 
 // =================================================================================
 
-char read_input( void )
+char readInput( void )
 {
   uint32_t DataRegister;
 
   // FE = "FIFO EMPTY"
   // Active wait for not Empty fifo
-  while ( ReadFromRegister( 0x4000C000 + 0x18 ) & 0x10 )
-    ;
+  while ( ReadFromRegister( 0x4000C000 + 0x18 ) & 0x10 );
 
   // Read from UART_O_DR
   DataRegister = ReadFromRegister( 0x4000C000 + 0x00 );
