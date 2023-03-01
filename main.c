@@ -13,33 +13,49 @@
 #include "main.h"
 #include "hal.h"
 #include "tui_utils.h"
-
+#include "string.h"
 #include <stdint.h>
 
-void main( void )
-{
-  uartInit();
-  string128 welcome;
-  strinit("Welcome to HangARM!\n\r", &welcome);
-  sendString(&welcome);
+		
+void userInput(string128 *input) {
+	char currentInput;
+	strclear(input);
 
-  string128 input;
-  strinit("", &input);
+  do {
+    currentInput = readChar();
+	if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97)) {
+		#ifdef WITHBELL
+    	sendChar('\b');
+		#endif
+	}
+	else if (currentInput < 91) {
+		currentInput += 32;	
+    	sendChar(currentInput);
+		stradd(input, &currentInput);
+	}
+	else {
+		sendChar(currentInput);
+		stradd(input, &currentInput);
+	}
+	stradd(input, &currentInput);
+  } while(input->length != 0 && currentInput != '\r' && input->length < 128);
+  sendChar('\n');
+}
+
+void main(void)
+{
+  static string128 *output, *word;
+  string128 *input, *digits;
   char userInput;
   char *inputString;
-  
-  do{
-    userInput = readChar();
-    sendChar(userInput);
+  int round = 1;
 
-    /*
-    int inputLen = getDigiCount(userInput);
-    char AsciiValue[inputLen];
-    intToText((int)userInput, AsciiValue);
-    printStringWithLen(AsciiValue, inputLen);
-    */
-
-  }while(userInput != '\r'); // Could also be solved with 10
-  sendChar('\n');
-
+  uartInit();
+  strinit("Welcome to HangARM!\n\r", output);
+  strinit("", input);
+  sendString(output);
+  strinit("Round ", output);
+  intToString(round, digits);
+  strcomb(output, digits);
+  stradd(output, ":\n\r");
 }

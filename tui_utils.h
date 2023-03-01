@@ -1,3 +1,5 @@
+#ifdef TUIUTIL
+#define TUIUTIL
 #include <stdint.h>
 #include "string.h"
 
@@ -17,9 +19,10 @@ int stringDigitsToInt(const string128 *s);
 
 // TODO: There is an equevilant function needed like stringDigitsToInt
 // The same principle only dividing by 10 / modulu by 10
-void intToText(int n, string128 *s);
+void intToString(int n, string128 *s);
 
 int getDigiCount(int n);
 
 // {base} power of {exp}
 int power(int base, int exp);
+#endif

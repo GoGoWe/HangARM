@@ -1,4 +1,5 @@
 #include "tui_utils.h"
+#include "string.h"
 
 const int ASCII_NUM_DIS = 48;
 
@@ -6,9 +7,36 @@ void clearTUI(void){
 
 }
 
+int power(int base, int exp)
+{
+    if(exp < 0) {
+		return -1;
+	}
+
+    int result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+            result *= base;
+        exp >>= 1;
+        base *= base;
+    }
+
+    return result;
+}
+
 int charDigitToInt(const char c)
 {
     return c - ASCII_NUM_DIS;
+}
+
+int getDigiCount(int n){
+    int dc = 0;
+    do{
+        n = n/10;
+        dc++;
+    }while(n != 0);
+    return dc;
 }
 
 int stringDigitsToInt(const string128 *s)
@@ -39,29 +67,4 @@ void intToString(int n, string128 *s){
     }while(len != 0);
 }
 
-int getDigiCount(int n){
-    int dc = 0;
-    do{
-        n = n/10;
-        dc++;
-    }while(n != 0);
-    return dc;
-}
 
-int power(int base, int exp)
-{
-    if(exp < 0) {
-		return -1;
-	}
-
-    int result = 1;
-    while (exp)
-    {
-        if (exp & 1)
-            result *= base;
-        exp >>= 1;
-        base *= base;
-    }
-
-    return result;
-}

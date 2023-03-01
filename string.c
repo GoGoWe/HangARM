@@ -1,7 +1,7 @@
 // author: Lennart Schuster
 #include "string.h"
 
-int getLength(char* base) {
+static int getLength(const char* base) {
 	int i = 1;
 	while(1) {
 		if (base[i] == 0) {
@@ -14,11 +14,21 @@ int getLength(char* base) {
 	return i;
 }
 
-void stradd(string128 *base, const char c) {
-	base->content[base->length] = c;
+void stradd(string128 *base, const char *c) {
+	for (int i = 0; i < getLength(c); i++) {
+		base->content[base->length] = c[i];
+		base->length++;
+	}
 }
 
-void strcopy(const char *base, char *target) {
+void strcomb(string128 *base, const string128 *extend) {
+	for (int i = 0; i < extend->length; i++) {
+		base->content[base->length] = extend->content[i];
+		base->length++;
+	}
+}
+
+void cstrcopy(const char *base, char *target) {
 	int i = 0;
 	while(base[i] != '\0') {
 		target[i] = base[i];
@@ -61,4 +71,10 @@ int strqal(const string128 *s1, const string128 *s2) {
 	return UNEQUAL;
 }
 
+void strclear(string128 *s) {
+	for (int i = 0; i < s->length; i++) {
+		s->content[i] = 0;
+	}
+	s->length = 0;
+}
 
