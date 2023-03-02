@@ -44,9 +44,8 @@ void userInput(string128 *input) {
     sendChar('\n');
 }
 
-void startWord(string128 *word, string128 *guess) {
+void startWord(string128 *word, string128 *guess, string128 * output) {
     userInput(word);
-	string128 *output;
     while (word->length < MINWORDLENGTH) {
         strinit("Word to short!", output);
 		sendString(output);
@@ -60,8 +59,8 @@ void startWord(string128 *word, string128 *guess) {
 }
 
 // returns 1 on won game, 0 on lost game
-int guessWord(const string128 *word, string128 *guess) {
-    string128 *digits, *input, *output;
+int guessWord(const string128 *word, string128 *guess, string128 *output) {
+    string128 *digits, *input;
     int p;
 
     for(int round = 1; round < NUMBEROFROUNDS; round++) {
@@ -101,8 +100,8 @@ void main(void) {
     // sleep
     strinit("Please enter your Word:\r\n", output);
     sendString(output);
-    startWord(word, guess);
-    if (guessWord(word, guess)) {
+    startWord(word, guess, output);
+    if (guessWord(word, guess, output)) {
 		strinit("You won! Word was:\r\n", output);
 		stradd(output, word->content);
     }

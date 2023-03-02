@@ -1,6 +1,32 @@
 #include "hal.h"
 // Specific implementation for ARM-Cortex M4 here:
 
+void writeToRegister(address a, uint32_t value)
+{
+    uint32_t *pointer_to_address;
+
+    // Assign pointer to given address:
+    pointer_to_address = (uint32_t *)a;
+
+    // write to the End of the Pointer
+    *pointer_to_address = value;
+}
+
+uint32_t readFromRegister(address a)
+{
+    uint32_t * pointer_to_address;
+    uint32_t value;
+
+    // Assign pointer to given address:
+    pointer_to_address = (uint32_t *)a;
+
+    // read from the End of the Pointer
+    value = *pointer_to_address;
+
+    // Return the read value
+    return value;
+}
+
 void uartInit( void )
 {
     // Enable FIFO:
@@ -43,30 +69,3 @@ char readChar(void)
     return (char)dataRegister;
 }
 
-// =================================================================================
-
-void writeToRegister(address a, uint32_t value)
-{
-    uint32_t *pointer_to_address;
-
-    // Assign pointer to given address:
-    pointer_to_address = (uint32_t *)a;
-
-    // write to the End of the Pointer
-    *pointer_to_address = value;
-}
-
-uint32_t readFromRegister(address a)
-{
-    uint32_t * pointer_to_address;
-    uint32_t value;
-
-    // Assign pointer to given address:
-    pointer_to_address = (uint32_t *)a;
-
-    // read from the End of the Pointer
-    value = *pointer_to_address;
-
-    // Return the read value
-    return value;
-}
