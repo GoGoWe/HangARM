@@ -9,7 +9,7 @@ typedef struct {
 	char content[128];
 } string128;
 
-int find(const string128 s, const char c, int p);
+void strrepc(string128 *s, const char c, const int p);
 
 void stradd(string128 *s, const char *c);
 

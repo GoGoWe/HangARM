@@ -31,45 +31,45 @@ static void copyData( void );
 
 __attribute__((used)) void SystemInit( void )
 {
-  zeroBss();
-  copyData();
+    zeroBss();
+    copyData();
 
-  main();
+    main();
 
-  // Programm End
-  for (;;);
+    // Programm End
+    for (;;);
 }
 
 static void zeroBss( void )
 {
-  // Symbol is located on start of BSS Section
-  extern uint32_t __bss_start__;
-  // Symbol is located on end of BSS Section
-  extern uint32_t __bss_end__;
+    // Symbol is located on start of BSS Section
+    extern uint32_t __bss_start__;
+    // Symbol is located on end of BSS Section
+    extern uint32_t __bss_end__;
 
-  /* loop over BSS Section and set to Zero */
-  for ( uint32_t * bssPos = &__bss_start__; bssPos < &__bss_end__; ++bssPos )
-  {
-    *bssPos = 0U;
-  }
+    /* loop over BSS Section and set to Zero */
+    for ( uint32_t * bssPos = &__bss_start__; bssPos < &__bss_end__; ++bssPos )
+    {
+        *bssPos = 0U;
+    }
 }
 
 static void copyData( void )
 {
-  // Symbol is located on start of Data Section
-  extern uint32_t __data_start__;
-  // Symbol is located on end of Data Section
-  extern uint32_t __data_end__;
-  // Symbol is located on start of LMA Data Section located in Flash
-  extern const uint32_t __data_start_rom__;
+    // Symbol is located on start of Data Section
+    extern uint32_t __data_start__;
+    // Symbol is located on end of Data Section
+    extern uint32_t __data_end__;
+    // Symbol is located on start of LMA Data Section located in Flash
+    extern const uint32_t __data_start_rom__;
 
-  // Source of Data (in Flash)
-  uint32_t const * dataCopyPos = &__data_start_rom__;
+    // Source of Data (in Flash)
+    uint32_t const * dataCopyPos = &__data_start_rom__;
 
-  /* loop over Data Section and copy data from flash */
-  for ( uint32_t * dataPos = &__data_start__; dataPos < &__data_end__; ++dataPos )
-  {
-    *dataPos = *dataCopyPos;
-    ++dataCopyPos;
-  }
+    /* loop over Data Section and copy data from flash */
+    for ( uint32_t * dataPos = &__data_start__; dataPos < &__data_end__; ++dataPos )
+    {
+        *dataPos = *dataCopyPos;
+        ++dataCopyPos;
+    }
 }
