@@ -3,5 +3,6 @@
         "*.json": "json",
         "stdint.h": "c"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"
 }

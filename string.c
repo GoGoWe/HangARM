@@ -2,7 +2,7 @@
 #include "string.h"
 
 static int getLength(const char* base) {
-    int i = 1;
+    int i = 0;
     while(1) {
         if (base[i] == 0) {
             break;
@@ -11,7 +11,7 @@ static int getLength(const char* base) {
             i++;
         }
     }
-    return i;
+    return i + 1;
 }
 
 void stradd(string128 *base, const char *c) {
@@ -19,6 +19,11 @@ void stradd(string128 *base, const char *c) {
         base->content[base->length] = c[i];
         base->length++;
     }
+}
+
+void straddChar(string128 *base, const char c) {
+    base->content[base->length] = c;
+    base->length++;
 }
 
 void strcomb(string128 *base, const string128 *extend) {
@@ -40,18 +45,18 @@ void cstrcopy(const char *base, char *target) {
 void strinit(char *base, string128 *s) {
     int l = getLength(base);
     s->length = l;
-    strcopy(base, s->content);
+    cstrcopy(base, s->content);
     for (int i = l; i < 127; i++) {
         s->content[i] = 0;
     }
 }
 
 // returns the first index of c in s, otherwise returns -1
-int strfind(const string128 *s, const char c, const int p) {
-    int index = -1;
-    for (int p; p < s->length; p++) {
-        if (s->content[p] == c) {
-            index = 0;
+signed int strfind(const string128 *s, const char c, const int p) {
+    signed int index = -1;
+    for (int i = p; i < s->length; i++) {
+        if (s->content[i] == c) {
+            index = i;
             break;
         }
     }
@@ -73,6 +78,11 @@ int strqal(const string128 *s1, const string128 *s2) {
         }
     }
     return UNEQUAL;
+}
+
+void strnull(string128 *s) {
+    strinit("", s);
+    s->length = 0;
 }
 
 void strclear(string128 *s) {

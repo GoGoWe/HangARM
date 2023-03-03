@@ -11,7 +11,11 @@ typedef struct {
 
 void strrepc(string128 *s, const char c, const int p);
 
+void strnull(string128 *s);
+
 void stradd(string128 *s, const char *c);
+
+void straddChar(string128 *s, const char c);
 
 void strcomb(string128 *base, const string128 *extend);
 

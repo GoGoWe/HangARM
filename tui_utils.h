@@ -1,4 +1,4 @@
-#ifdef TUIUTIL
+#ifndef TUIUTIL
 #define TUIUTIL
 #include <stdint.h>
 #include "string.h"
