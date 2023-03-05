@@ -1,4 +1,4 @@
-// author: Lennart Schuster
+// author: Lennart Schuster, Gabriel Wuwer
 #include "string.h"
 
 static int getLength(const char* base) {
@@ -44,7 +44,7 @@ void cstrcopy(const char *base, char *target) {
 // to initialize a string16, nulls and calculates length
 void strinit(char *base, string128 *s) {
     int l = getLength(base);
-    s->length = l;
+    s->length = l - 1;
     cstrcopy(base, s->content);
     for (int i = l; i < 127; i++) {
         s->content[i] = 0;
@@ -78,11 +78,6 @@ int strqal(const string128 *s1, const string128 *s2) {
         }
     }
     return UNEQUAL;
-}
-
-void strnull(string128 *s) {
-    strinit("", s);
-    s->length = 0;
 }
 
 void strclear(string128 *s) {

@@ -70,13 +70,12 @@ void startWord(string128 *word, string128 *guess, string128 *output)
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input;
-	strnull(&input);
-	strnull(&digits);
 
 	for (int round = 0; round < NUMBEROFROUNDS; round++)
 	{
 		// optimize with an insert/replace function
 		strinit("Round ", output);
+		strclear(&digits);
 		intToString(round+1, &digits);
 		strcomb(output, &digits);
 		stradd(output, ":\n\r");
@@ -91,12 +90,12 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 				strrepc(guess, input.content[0], pos);
 				pos = strfind(word, input.content[0], pos + 1);
 			}
-			if (pos != -1 && strfind(guess, '_', 0) == -1)
+			if (pos == -1 && strfind(guess, '_', 0) == -1)
 			{
 				return 1;
 			}
 		}
-		else
+		else if(input.length == word->length)
 		{
 			if (strqal(word, &input))
 			{
@@ -113,8 +112,6 @@ void main(void)
 {
 	static string128 output, word, guess;
 	uartInit();
-	strnull(&word);
-	strnull(&guess);
 	strinit("Welcome to HangARM!\n\r", &output);
 	sendString(&output);
 
@@ -131,4 +128,5 @@ void main(void)
 		strinit("Lol, fuqing Pleb kekw, obviously the word was:\r\n", &output);
 		stradd(&output, word.content);
 	}
+	sendString(&output);
 }

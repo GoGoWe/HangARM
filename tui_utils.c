@@ -58,6 +58,7 @@ int stringDigitsToInt(const string128 *s)
     return num;
 }
 
+// TODO: after 9 the digits are printed in wrong order 13 => 31
 void intToString(int n, string128 *s)
 {
     int temp = 0;
@@ -66,7 +67,8 @@ void intToString(int n, string128 *s)
     do
     {
         temp = n % 10;
-        s->content[len - 1] = temp + 48;
+        straddChar(s, temp + ASCII_NUM_DIS);
+        //s->content[len - 1] = temp + 48;
 
         n = n / 10;
         --len;
