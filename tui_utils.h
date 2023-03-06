@@ -2,8 +2,12 @@
 #define TUIUTIL
 #include <stdint.h>
 #include "string.h"
+const int ASCII_NUM_DIS = 48;
+const int TERMINAL_HIGHT = 24;
 
 void clearTUI(void);
+
+void drawASCIIArt(const string128 *art[TERMINAL_HIGHT], int artHight);
 
 // Converts a char {c} NUMBER to an valid integer
 // unhandeld output if {c} is not a number from 0-9

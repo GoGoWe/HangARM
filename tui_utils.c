@@ -1,10 +1,25 @@
 #include "tui_utils.h"
 #include "string.h"
-
-const int ASCII_NUM_DIS = 48;
+#include "hal.h"
 
 void clearTUI(void)
 {
+    static string128 output;
+    strinit("", &output);
+    for(int i = TERMINAL_HIGHT; i>0; --i){
+        straddChar(&output,'\n');
+        straddChar(&output,'\r');
+    }
+    sendString(&output);
+}
+
+void drawASCIIArt(const string128 *art[TERMINAL_HIGHT], int artHight){
+    for(int i = 0; i>=TERMINAL_HIGHT; i++){
+        if(i >= artHight){
+            strclear(&art[i]);
+        }
+        sendString(&art[i]);
+    }
 }
 
 int power(int base, int exp)

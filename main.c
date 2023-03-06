@@ -58,6 +58,7 @@ void startWord(string128 *word, string128 *guess, string128 *output)
 		sendString(output);
 		userInput(word);
 	}
+	clearTUI();
 
 	char c = '_';
 	for (int i = 0; i < word->length; i++)
@@ -74,11 +75,11 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 	for (int round = 0; round < NUMBEROFROUNDS; round++)
 	{
 		// optimize with an insert/replace function
-		strinit("Round ", output);
+		strinit("\n\rRound ", output);
 		strclear(&digits);
 		intToString(round+1, &digits);
 		strcomb(output, &digits);
-		stradd(output, ":\n\r");
+		stradd(output, ":\n\rInput your guess:");
 		sendString(output);
 		// insert
 		userInput(&input);
@@ -102,6 +103,7 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 				return 1;
 			}
 		}
+		// drawASCIIArt(); TODO:
 		sendString(guess);
 
 	}
@@ -115,17 +117,17 @@ void main(void)
 	strinit("Welcome to HangARM!\n\r", &output);
 	sendString(&output);
 
-	strinit("Please enter your Word:\r\n", &output);
+	strinit("Please enter your Word: ", &output);
 	sendString(&output);
 	startWord(&word, &guess, &output);
 	if (guessWord(&word, &guess, &output))
 	{
-		strinit("You won! Word was:\r\n", &output);
+		strinit("\n\rYou won! Word was: ", &output);
 		stradd(&output, word.content);
 	}
 	else
 	{
-		strinit("Lol, fuqing Pleb kekw, obviously the word was:\r\n", &output);
+		strinit("\n\rLol, fuqing Pleb kekw, obviously the word was: ", &output);
 		stradd(&output, word.content);
 	}
 	sendString(&output);

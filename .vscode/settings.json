@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "*.json": "json",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "string.h": "c"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"
