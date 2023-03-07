@@ -1,6 +1,14 @@
 #include "hal.h"
 // Specific implementation for ARM-Cortex M4 here:
 
+#define FREQ_MHZ 80
+#define SYST_CSR    0xE000E010
+#define SYST_RL     0xE000E014
+#define SYST_CVR    0xE000E018
+#define SYST_CALIB  0xE000E01C
+
+static ms10 ticks;
+
 void writeToRegister(address a, uint32_t value)
 {
     uint32_t *pointer_to_address;
@@ -25,6 +33,22 @@ uint32_t readFromRegister(address a)
 
     // Return the read value
     return value;
+}
+
+void SysTick_Handler() {
+    ticks++;
+}
+
+void timerInit(void) {
+    long clockTicks = FREQ_MHZ * 10000; //100ms
+    writeToRegister(SYST_RL, clockTicks);
+    writeToRegister(SYST_CVR, 0);
+    writeToRegister(SYST_CSR, 0x00000007);
+}
+
+void sleep(const ms10 s) {
+    ms10 endTime = ticks + s;
+    while(endTime > ticks);
 }
 
 void uartInit( void )

@@ -67,10 +67,31 @@ void startWord(string128 *word, string128 *guess, string128 *output)
 	}
 }
 
+static void asciiToString(string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT]) {
+	for(int h = 0; h > ASCIIHEIGHT; h++) {
+		for(int w = 0; w > ASCIIWIDTH; w++) {
+			art[h].content[w] = asciiart[h * ASCIIHEIGHT + w];
+			buffer[h].content[w] = '\0';
+		}
+		straddChar(&art[h], '\n');
+		straddChar(&art[h], '\r');
+		art[h].length = 40;
+		buffer[h].length = 0;
+	}
+}
+
+static void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
+	for (int i = 0; i < p; i++) {
+		sendString(&art[20]);
+		sleep(1);
+	};
+}
+
 // returns 1 on won game, 0 on lost game
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input;
+	int rounds = 0, asciiLines = 0; 
 
 	for (int round = 0; round < NUMBEROFROUNDS; round++)
 	{
@@ -103,9 +124,9 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 				return 1;
 			}
 		}
-		// drawASCIIArt(); TODO:
+		asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - rounds);
+		expandAsciArt(asciiArt, asciiBuffer, asciiLines);
 		sendString(guess);
-
 	}
 	return 0;
 }
@@ -113,15 +134,18 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 void main(void)
 {
 	static string128 output, word, guess;
+
+	asciiToString(asciiArt, asciiBuffer);
+	timerInit();
 	uartInit();
 	strinit("Welcome to HangARM!\n\r", &output);
 	sendString(&output);
-
-	strinit("Please enter your Word: ", &output);
+	strinit("Please enter your Word: \n\r", &output);
 	sendString(&output);
 	startWord(&word, &guess, &output);
 	if (guessWord(&word, &guess, &output))
 	{
+		expandAsciArt(asciiArt, asciiBuffer, ASCIIHEIGHT);
 		strinit("\n\rYou won! Word was: ", &output);
 		stradd(&output, word.content);
 	}

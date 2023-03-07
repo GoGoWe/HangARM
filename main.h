@@ -12,7 +12,33 @@
 
 #ifndef MAIN_H
 #define MAIN_H
+#include "string.h"
 
-void main( void );
+#define ASCIIWIDTH 40
+#define ASCIIHEIGHT 20
+#define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
+void main(void);
 
+static string128 asciiArt[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
+char asciiart[ASCIISIZE] =
+"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+"MMMMMMMMMMKXKXXNNWMMMMMMMMMMMMMMMMMMMMMM"
+"MMMMMMMWXd....',:coxk0XXNNWMMMMMMMMMMMMM"
+"MMMMMMMXk'..............,;:ldk0KXXWMMMMM"
+"MMMMMMWOl........................';0MMMM"
+"MMMMMMNO'.....................   ..kXMMM"
+"MMMMMM0o......................  ..:OXMMM"
+"MMMMMXk'......l;.,'...............xONMMM"
+"MMMMM0o.....'kxk.KO,xl,l.''......,kKMMMM"
+"MMMMNO,........;,:ll:Kdk:oo:.....oONMMMM"
+"MMMM0o.................''','....,O0WMMMM"
+"MMMNk'..........................l0XMMMMM"
+"MMM0d... .......................x0WMMMMM"
+"MMMXk..........................cOXMMMMMM"
+"MMMMMXxolc;,'..................kOWMMMMMM"
+"MMMMMWNXXKK00OOkdol:;'........;OKMMMMMMM"
+"MMMMMMMMMMMMMWWNNXKK00OOkdolc:ONWMMMMMMM"
+"MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
+"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 #endif
