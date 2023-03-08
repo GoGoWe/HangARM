@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include "string.h"
 
+#define USERTIMEOUTMS100 100
 static const uint32_t UARTDR = 0x4000C000;
 
 typedef uint32_t address;
@@ -23,6 +24,7 @@ uint32_t readFromRegister(address a);
 
 // for INIT the clock:
 void timerInit();
+void setupTimer(const ms10 target_timeout);
 
 // timer usage
 void sleep(ms10 s);

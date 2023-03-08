@@ -1,4 +1,5 @@
 #include "hal.h"
+#include "main.h"
 // Specific implementation for ARM-Cortex M4 here:
 
 #define FREQ_MHZ 80
@@ -8,6 +9,10 @@
 #define SYST_CALIB  0xE000E01C
 
 static ms10 ticks;
+static ms10 targetTicks;
+static ms10 currentTimeout;
+// 1 if timeout
+static int timeoutHit;
 
 void writeToRegister(address a, uint32_t value)
 {
@@ -37,6 +42,9 @@ uint32_t readFromRegister(address a)
 
 void SysTick_Handler() {
     ticks++;
+    if (ticks == targetTicks) {
+        timeoutHit = 1;
+    }
 }
 
 void timerInit(void) {
@@ -46,9 +54,20 @@ void timerInit(void) {
     writeToRegister(SYST_CSR, 0x00000007);
 }
 
+void setupTimer(const ms10 targetTimeout) {
+    timeoutHit = 0;
+    currentTimeout = targetTimeout;
+    targetTicks = currentTimeout + ticks;
+}
+
+void resetTimer() {
+    timeoutHit = 0;
+    targetTicks = currentTimeout + ticks;
+}
+
 void sleep(const ms10 s) {
-    ms10 endTime = ticks + s;
-    while(endTime > ticks);
+    setupTimer(s);
+    while(!timeoutHit);
 }
 
 void uartInit( void )
@@ -83,7 +102,12 @@ char readChar(void)
 
     // FE = "FIFO EMPTY"
     // Active wait for not Empty fifo
-    while ( readFromRegister( UARTDR + 0x18 ) & 0x10 );
+    setupTimer(USERTIMEOUTMS100);
+    while ( readFromRegister( UARTDR + 0x18 ) & 0x10) {
+        if (timeoutHit) {
+            return (char)18;
+        }
+    };
 
     // read from UART_O_DR
     dataRegister = readFromRegister( UARTDR + 0x00 );

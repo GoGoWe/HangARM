@@ -12,14 +12,10 @@
 
 #ifndef MAIN_H
 #define MAIN_H
-#include "string.h"
 
-#define ASCIIWIDTH 40
-#define ASCIIHEIGHT 20
-#define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
+#include "tui_utils.h"
 void main(void);
 
-static string128 asciiArt[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
 char asciiart[ASCIISIZE] =
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"

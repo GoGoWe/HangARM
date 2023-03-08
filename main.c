@@ -19,7 +19,7 @@
 #define NUMBEROFROUNDS 10
 #define MINWORDLENGTH 5
 
-void userInput(string128 *input)
+static void userInput(string128 *input)
 {
 	char currentInput;
 	strclear(input);
@@ -27,7 +27,11 @@ void userInput(string128 *input)
 	do
 	{
 		currentInput = readChar();
-		if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
+		if (currentInput == 18) {
+			straddChar(input, '\e');
+			break;
+		}
+		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
 		{
 #ifdef WITHBELL
 			sendChar('\b');
@@ -49,7 +53,7 @@ void userInput(string128 *input)
 	sendChar('\r');
 }
 
-void startWord(string128 *word, string128 *guess, string128 *output)
+static void startWord(string128 *word, string128 *guess, string128 *output)
 {
 	userInput(word);
 	while (word->length < MINWORDLENGTH)
@@ -66,27 +70,6 @@ void startWord(string128 *word, string128 *guess, string128 *output)
 		straddChar(guess, c);
 	}
 }
-
-static void asciiToString(string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT]) {
-	for(int h = 0; h > ASCIIHEIGHT; h++) {
-		for(int w = 0; w > ASCIIWIDTH; w++) {
-			art[h].content[w] = asciiart[h * ASCIIHEIGHT + w];
-			buffer[h].content[w] = '\0';
-		}
-		straddChar(&art[h], '\n');
-		straddChar(&art[h], '\r');
-		art[h].length = 40;
-		buffer[h].length = 0;
-	}
-}
-
-static void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
-	for (int i = 0; i < p; i++) {
-		sendString(&art[20]);
-		sleep(1);
-	};
-}
-
 // returns 1 on won game, 0 on lost game
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
@@ -104,7 +87,7 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		sendString(output);
 		// insert
 		userInput(&input);
-		if (input.length == 1)
+		if (input.length == 1 && input.content[0] != '\e')
 		{
 			signed int pos = strfind(word, input.content[0], 0);
 			while (pos != -1)
@@ -135,7 +118,7 @@ void main(void)
 {
 	static string128 output, word, guess;
 
-	asciiToString(asciiArt, asciiBuffer);
+	asciiToString(asciiArt, asciiBuffer, asciiart);
 	timerInit();
 	uartInit();
 	strinit("Welcome to HangARM!\n\r", &output);
