@@ -6,20 +6,31 @@ void clearTUI(void)
 {
     static string128 output;
     strinit("", &output);
-    for(int i = TERMINAL_HIGHT; i>0; --i){
+    for(int i = ASCIIHEIGHT; i>0; --i){
         straddChar(&output,'\n');
         straddChar(&output,'\r');
     }
     sendString(&output);
 }
 
-void drawASCIIArt(const string128 *art[TERMINAL_HIGHT], int artHight){
-    for(int i = 0; i>=TERMINAL_HIGHT; i++){
-        if(i >= artHight){
-            strclear(&art[i]);
-        }
-        sendString(&art[i]);
-    }
+void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt) {
+	for(int h = 0; h < ASCIIHEIGHT; h++) {
+		for(int w = 0; w < ASCIIWIDTH; w++) {
+			asciiCon[h].content[w] = asciiArt[h * ASCIIWIDTH + w];
+			buffer[h].content[w] = '\0';
+		}
+		straddChar(&asciiCon[h], '\n');
+		straddChar(&asciiCon[h], '\r');
+		asciiCon[h].length = 40;
+		buffer[h].length = 0;
+	}
+}
+
+void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
+	for (int i = 0; i < p; i++) {
+		sendString(&asciiCon[i]);
+		sleep(1);
+	};
 }
 
 int power(int base, int exp)

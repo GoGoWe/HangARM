@@ -10,6 +10,7 @@
  * @brief C Main.
  **/
 
+
 #include "main.h"
 #include "hal.h"
 #include "tui_utils.h"
@@ -19,7 +20,7 @@
 #define NUMBEROFROUNDS 10
 #define MINWORDLENGTH 5
 
-void userInput(string128 *input)
+static void userInput(string128 *input)
 {
 	char currentInput;
 	strclear(input);
@@ -27,7 +28,14 @@ void userInput(string128 *input)
 	do
 	{
 		currentInput = readChar();
-		if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
+		if (currentInput == 18) {
+			straddChar(input, '\e');
+			string128 output;
+			strinit("Times up, you kek!\n\r", &output);
+			sendString(&output);
+			break;
+		}
+		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
 		{
 #ifdef WITHBELL
 			sendChar('\b');
@@ -49,7 +57,7 @@ void userInput(string128 *input)
 	sendChar('\r');
 }
 
-void startWord(string128 *word, string128 *guess, string128 *output)
+static void startWord(string128 *word, string128 *guess, string128 *output)
 {
 	userInput(word);
 	while (word->length < MINWORDLENGTH)
@@ -71,11 +79,14 @@ void startWord(string128 *word, string128 *guess, string128 *output)
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input;
+	int asciiLines = 0; 
+	int failed = 0;
 
 	for (int round = 0; round < NUMBEROFROUNDS; round++)
 	{
+		failed = 0;
 		// optimize with an insert/replace function
-		strinit("\n\rRound ", output);
+		strinit("\n\rTry Number ", output);
 		strclear(&digits);
 		intToString(round+1, &digits);
 		strcomb(output, &digits);
@@ -83,7 +94,7 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		sendString(output);
 		// insert
 		userInput(&input);
-		if (input.length == 1)
+		if (input.length == 1 && input.content[0] != '\e')
 		{
 			signed int pos = strfind(word, input.content[0], 0);
 			while (pos != -1)
@@ -103,9 +114,11 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 				return 1;
 			}
 		}
-		// drawASCIIArt(); TODO:
-		sendString(guess);
-
+		asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
+		expandAsciArt(asciiContainer, asciiBuffer, asciiLines);
+		strinit("\n\r", output);
+		stradd(output, guess->content);
+		sendString(output);
 	}
 	return 0;
 }
@@ -113,15 +126,20 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 void main(void)
 {
 	static string128 output, word, guess;
+
+	// First time Initialization 
+	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+	timerInit();
 	uartInit();
+
 	strinit("Welcome to HangARM!\n\r", &output);
 	sendString(&output);
-
-	strinit("Please enter your Word: ", &output);
+	strinit("Please enter your Word: \n\r", &output);
 	sendString(&output);
 	startWord(&word, &guess, &output);
 	if (guessWord(&word, &guess, &output))
 	{
+		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
 		strinit("\n\rYou won! Word was: ", &output);
 		stradd(&output, word.content);
 	}
