@@ -66,7 +66,7 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 		sendString(output);
 		userInput(word);
 		if (word->content[word->length] == 18) {
-			strnull(word);
+			strclear(word);
 			strinit("Timeout. Try again", output);
 			sendString(output);
 		}
@@ -123,11 +123,12 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		clearTUI();
 
 		if(guessFailed){
+			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
 			randomExpandAsciiArt(asciiContainer, asciiBuffer, seed);
 		}else{
 			round--;
 		}
-		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
+		expandAsciArt(asciiBuffer, ASCIIHEIGHT);
 		strinit("\n\r", output);
 		stradd(output, guess->content);
 		sendString(output);
@@ -162,7 +163,7 @@ void main(void)
 	else
 	{
 		clearTUI();
-		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
+		expandAsciArt(asciiContainer, ASCIIHEIGHT);
 		strinit("\n\rYou Lost! The word was: ", &output);
 		stradd(&output, word.content);
 	}

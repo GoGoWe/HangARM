@@ -24,6 +24,8 @@ target_sources(
     tui_utils.c
     string.h
     string.c
+    random.h
+    random.c
     )
 
 target_link_options(

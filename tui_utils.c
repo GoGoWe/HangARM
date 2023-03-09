@@ -27,7 +27,7 @@ void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT
 	}
 }
 
-void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
+void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], int p) {
 	for (int i = p; i > 0; i--) {
 		sendString(&asciiCon[i]);
 		//sleep(1);
@@ -35,11 +35,11 @@ void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCII
 }
 
 void randomExpandAsciiArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int seed) {
-	static int filledFields;
-	float pHitField = (ASCIISIZE - filledFields) / ASCIISIZE;
+	static int filledFields;    // How do you assure that filledFields is 0?
+	int fHitField = (ASCIISIZE - filledFields) / ASCIISIZE;
 	int maxFillsPerRound = ASCIISIZE / NUMBEROFROUNDS;
-	int attempts = maxFillsPerRound / pHitField;
-	for (int i = 0; i > attempts; i++) {
+	int attempts = maxFillsPerRound / fHitField;
+	for (int i = 0; i < attempts; i++) {
 		int c = random(seed, 0, ASCIIWIDTH);
 		int r = random(seed, 0, ASCIIHEIGHT);
 		if (buffer[c].content[r] == '\0') {
