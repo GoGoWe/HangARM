@@ -31,7 +31,7 @@ static void userInput(string128 *input)
 		if (currentInput == 18) {
 			straddChar(input, '\e');
 			string128 output;
-			strinit("Times up, you kek!\n\r", &output);
+			strinit("Times up!\n\r", &output);
 			sendString(&output);
 			break;
 		}
@@ -136,21 +136,16 @@ void main(void)
 	static string128 output, word, guess;
 
 	// First time Initialization 
-	asciiToString(asciiContainer, asciiBuffer, asciiTitel);
+	asciiToString(asciiContainer, asciiBuffer, asciiArt);
 	timerInit();
 	uartInit();
 
-	// Printing title 
-	//expandAsciArt(asciiContainer, asciiBuffer, 10);
-
-	// Ask for the wort another user should guess
+	strinit("Welcome to HangARM!\n\r", &output);
+	sendString(&output);
 	strinit("Please enter your Word: \n\r", &output);
 	sendString(&output);
 	startWord(&word, &guess, &output);
-
-	// Init ASCII Hangman
-	asciiToString(asciiContainer, asciiBuffer, asciiArt);
-
+	
 	if (guessWord(&word, &guess, &output))
 	{
 		clearTUI();
@@ -161,7 +156,7 @@ void main(void)
 	{
 		clearTUI();
 		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
-		strinit("\n\rLol, fuqing Pleb kekw, obviously the word was: ", &output);
+		strinit("\n\rYou Lost! The word was: ", &output);
 		stradd(&output, word.content);
 	}
 	sendString(&output);
