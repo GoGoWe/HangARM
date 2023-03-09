@@ -1,5 +1,5 @@
-#ifndef TUIUTIL
-#define TUIUTIL
+#ifndef TUIUTIL_H
+#define TUIUTIL_H
 #include <stdint.h>
 #include "string.h"
 #define ASCII_NUM_DIS 48
@@ -7,11 +7,33 @@
 #define ASCIIHEIGHT 20
 #define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
 
-static string128 asciiArt[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
+static string128 asciiContainer[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
+static char asciiArt[ASCIISIZE] =
+"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+"MMMMMMMMMMKXKXXNNWMMMMMMMMMMMMMMMMMMMMMM"
+"MMMMMMMWXd....',:coxk0XXNNWMMMMMMMMMMMMM"
+"MMMMMMMXk'..............,;:ldk0KXXWMMMMM"
+"MMMMMMWOl........................';0MMMM"
+"MMMMMMNO'.....................   ..kXMMM"
+"MMMMMM0o......................  ..:OXMMM"
+"MMMMMXk'......l;.,'...............xONMMM"
+"MMMMM0o.....'kxk.ARM.l,l.''......,kKMMMM"
+"MMMMNO,........;,:ll:Kdk:oo:.....oONMMMM"
+"MMMM0o.................''','....,O0WMMMM"
+"MMMNk'..........................l0XMMMMM"
+"MMM0d... .......................x0WMMMMM"
+"MMMXk..........................cOXMMMMMM"
+"MMMMMXxolc;,'..................kOWMMMMMM"
+"MMMMMWNXXKK00OOkdol:;'........;OKMMMMMMM"
+"MMMMMMMMMMMMMWWNNXKK00OOkdolc:ONWMMMMMMM"
+"MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
+"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 
 void clearTUI(void);
-void asciiToString(string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiart);
+void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt);
 void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p);
+
 
 // Converts a char {c} NUMBER to an valid integer
 // unhandeld output if {c} is not a number from 0-9

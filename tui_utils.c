@@ -13,22 +13,22 @@ void clearTUI(void)
     sendString(&output);
 }
 
-void asciiToString(string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiart) {
-	for(int h = 0; h > ASCIIHEIGHT; h++) {
-		for(int w = 0; w > ASCIIWIDTH; w++) {
-			art[h].content[w] = asciiart[h * ASCIIHEIGHT + w];
+void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt) {
+	for(int h = 0; h < ASCIIHEIGHT; h++) {
+		for(int w = 0; w < ASCIIWIDTH; w++) {
+			asciiCon[h].content[w] = asciiArt[h * ASCIIWIDTH + w];
 			buffer[h].content[w] = '\0';
 		}
-		straddChar(&art[h], '\n');
-		straddChar(&art[h], '\r');
-		art[h].length = 40;
+		straddChar(&asciiCon[h], '\n');
+		straddChar(&asciiCon[h], '\r');
+		asciiCon[h].length = 40;
 		buffer[h].length = 0;
 	}
 }
 
-void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
+void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
 	for (int i = 0; i < p; i++) {
-		sendString(&art[20]);
+		sendString(&asciiCon[i]);
 		sleep(1);
 	};
 }

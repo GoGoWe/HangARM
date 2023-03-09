@@ -2,7 +2,8 @@
     "files.associations": {
         "*.json": "json",
         "stdint.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "tui_utils.h": "c"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"

@@ -10,6 +10,7 @@
  * @brief C Main.
  **/
 
+
 #include "main.h"
 #include "hal.h"
 #include "tui_utils.h"
@@ -29,6 +30,9 @@ static void userInput(string128 *input)
 		currentInput = readChar();
 		if (currentInput == 18) {
 			straddChar(input, '\e');
+			string128 output;
+			strinit("Times up, you kek!\n\r", &output);
+			sendString(&output);
 			break;
 		}
 		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
@@ -70,6 +74,7 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 		straddChar(guess, c);
 	}
 }
+
 // returns 1 on won game, 0 on lost game
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
@@ -108,8 +113,10 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 			}
 		}
 		asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - rounds);
-		expandAsciArt(asciiArt, asciiBuffer, asciiLines);
-		sendString(guess);
+		expandAsciArt(asciiContainer, asciiBuffer, asciiLines);
+		strinit("\n\r", output);
+		stradd(output, guess->content);
+		sendString(output);
 	}
 	return 0;
 }
@@ -118,9 +125,11 @@ void main(void)
 {
 	static string128 output, word, guess;
 
-	asciiToString(asciiArt, asciiBuffer, asciiart);
+	// First time Initialization 
+	asciiToString(asciiContainer, asciiBuffer, asciiArt);
 	timerInit();
 	uartInit();
+
 	strinit("Welcome to HangARM!\n\r", &output);
 	sendString(&output);
 	strinit("Please enter your Word: \n\r", &output);
@@ -128,7 +137,7 @@ void main(void)
 	startWord(&word, &guess, &output);
 	if (guessWord(&word, &guess, &output))
 	{
-		expandAsciArt(asciiArt, asciiBuffer, ASCIIHEIGHT);
+		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
 		strinit("\n\rYou won! Word was: ", &output);
 		stradd(&output, word.content);
 	}

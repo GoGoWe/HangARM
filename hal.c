@@ -1,5 +1,4 @@
 #include "hal.h"
-#include "main.h"
 // Specific implementation for ARM-Cortex M4 here:
 
 #define FREQ_MHZ 80
@@ -48,7 +47,7 @@ void SysTick_Handler() {
 }
 
 void timerInit(void) {
-    long clockTicks = FREQ_MHZ * 10000; //100ms
+    long clockTicks = FREQ_MHZ * 10000; //10ms
     writeToRegister(SYST_RL, clockTicks);
     writeToRegister(SYST_CVR, 0);
     writeToRegister(SYST_CSR, 0x00000007);
@@ -102,7 +101,7 @@ char readChar(void)
 
     // FE = "FIFO EMPTY"
     // Active wait for not Empty fifo
-    setupTimer(USERTIMEOUTMS100);
+    setupTimer(USERTIMEOUTMS10);
     while ( readFromRegister( UARTDR + 0x18 ) & 0x10) {
         if (timeoutHit) {
             return (char)18;

@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include "string.h"
 
-#define USERTIMEOUTMS100 100
+#define USERTIMEOUTMS10 1000
 static const uint32_t UARTDR = 0x4000C000;
 
 typedef uint32_t address;
