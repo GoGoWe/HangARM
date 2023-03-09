@@ -5,9 +5,11 @@
 #define ASCII_NUM_DIS 48
 #define ASCIIWIDTH 40
 #define ASCIIHEIGHT 20
+#define TUIHIGHT 24
 #define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
 
 static string128 asciiContainer[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
+
 static char asciiArt[ASCIISIZE] =
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
@@ -29,6 +31,18 @@ static char asciiArt[ASCIISIZE] =
 "MMMMMMMMMMMMMWWNNXKK00OOkdolc:ONWMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
+
+static char asciiTitel[800] =
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+"dP                              MMP\"\"\"\"\"\"\"MMMM\"\"\"\"\"\"\"`MMM\"\"\"\"\"`\'\"\"\"`YM   "
+"88                              M' .mmmm  MMMM  mmmm,  MM  mm.  mm.  M   "
+"88d888b..d8888b.88d888b..d8888b.M         `MM'        .MM  MMM  MMM  M   "
+"88'  `8888'  `8888'  `8888'  `88M  MMMMM  MMMM  MMMb. \"MM  MMM  MMM  M   "
+"88    8888.  .8888    8888.  .88M  MMMMM  MMMM  MMMMM  MM  MMM  MMM  M   "
+"dP    dP`88888P8dP    dP`8888P88M  MMMMM  MMMM  MMMMM  MM  MMM  MMM  M   "
+"                             .88MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   "
+"                         d8888P                                          "
+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
 
 
 void clearTUI(void);

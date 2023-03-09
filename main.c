@@ -80,16 +80,16 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 static int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input;
-	int asciiLines = 0; 
-	int failed = 0;
+	int asciiLines = 0; // Bool to determinate if input was wrong
+	int guessFailed = 0;
 
-	for (int round = 0; round < NUMBEROFROUNDS; round++)
+	for (int round = 1; round <= NUMBEROFROUNDS; round++)
 	{
-		failed = 0;
+		guessFailed = 1; 
 		// optimize with an insert/replace function
 		strinit("\n\rTry Number ", output);
 		strclear(&digits);
-		intToString(round+1, &digits);
+		intToString(round-1, &digits);
 		strcomb(output, &digits);
 		stradd(output, ":\n\rInput your guess:");
 		sendString(output);
@@ -100,6 +100,7 @@ static int guessWord(const string128 *word, string128 *guess, string128 *output)
 			signed int pos = strfind(word, input.content[0], 0);
 			while (pos != -1)
 			{
+				guessFailed = 0;
 				strrepc(guess, input.content[0], pos);
 				pos = strfind(word, input.content[0], pos + 1);
 			}
@@ -115,7 +116,14 @@ static int guessWord(const string128 *word, string128 *guess, string128 *output)
 				return 1;
 			}
 		}
-		asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
+		clearTUI();
+
+		if(guessFailed){
+			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
+		}else{
+			round--;
+		}
+		// Output ASCII Art and current guessed word e.g H _ _ g m _ _ 
 		expandAsciArt(asciiContainer, asciiBuffer, asciiLines);
 		strinit("\n\r", output);
 		stradd(output, guess->content);
@@ -147,23 +155,31 @@ void main(void)
 	static string128 output, word, guess;
 
 	// First time Initialization 
-	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+	asciiToString(asciiContainer, asciiBuffer, asciiTitel);
 	timerInit();
 	uartInit();
 
-	strinit("Welcome to HangARM!\n\r", &output);
-	sendString(&output);
+	// Printing title 
+	//expandAsciArt(asciiContainer, asciiBuffer, 10);
+
+	// Ask for the wort another user should guess
 	strinit("Please enter your Word: \n\r", &output);
 	sendString(&output);
 	startWord(&word, &guess, &output);
+
+	// Init ASCII Hangman
+	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+
 	if (guessWord(&word, &guess, &output))
 	{
-		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
+		clearTUI();
 		strinit("\n\rYou won! Word was: ", &output);
 		stradd(&output, word.content);
 	}
 	else
 	{
+		clearTUI();
+		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
 		strinit("\n\rLol, fuqing Pleb kekw, obviously the word was: ", &output);
 		stradd(&output, word.content);
 	}
