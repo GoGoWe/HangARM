@@ -136,15 +136,21 @@ void main(void)
 	static string128 output, word, guess;
 
 	// First time Initialization 
-	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+	asciiToString(asciiContainer, asciiBuffer, asciiTitel);
 	timerInit();
 	uartInit();
 
-	strinit("Welcome to HangARM!\n\r", &output);
-	sendString(&output);
+	// Printing title 
+	//expandAsciArt(asciiContainer, asciiBuffer, 10);
+
+	// Ask for the wort another user should guess
 	strinit("Please enter your Word: \n\r", &output);
 	sendString(&output);
 	startWord(&word, &guess, &output);
+
+	// Init ASCII Hangman
+	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+
 	if (guessWord(&word, &guess, &output))
 	{
 		clearTUI();
