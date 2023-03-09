@@ -15,6 +15,7 @@
 #include "hal.h"
 #include "tui_utils.h"
 #include "string.h"
+#include "random.h"
 #include <stdint.h>
 
 #define NUMBEROFROUNDS 10
@@ -65,6 +66,11 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 		strinit("Word to short! Input a new one:\n\r", output);
 		sendString(output);
 		userInput(word);
+		if (word->content[word->length] == 18) {
+			strnull(word);
+			strinit("Timeout. Try again", output);
+			sendString(output);
+		}
 	}
 	clearTUI();
 
