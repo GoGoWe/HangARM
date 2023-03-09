@@ -30,6 +30,7 @@ static char asciiArt[ASCIISIZE] =
 "MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 
+
 void clearTUI(void);
 void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt);
 void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p);

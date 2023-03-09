@@ -79,12 +79,14 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input;
-	int rounds = 0, asciiLines = 0; 
+	int asciiLines = 0; 
+	int failed = 0;
 
 	for (int round = 0; round < NUMBEROFROUNDS; round++)
 	{
+		failed = 0;
 		// optimize with an insert/replace function
-		strinit("\n\rRound ", output);
+		strinit("\n\rTry Number ", output);
 		strclear(&digits);
 		intToString(round+1, &digits);
 		strcomb(output, &digits);
@@ -112,7 +114,7 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 				return 1;
 			}
 		}
-		asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - rounds);
+		asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
 		expandAsciArt(asciiContainer, asciiBuffer, asciiLines);
 		strinit("\n\r", output);
 		stradd(output, guess->content);
