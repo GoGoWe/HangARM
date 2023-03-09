@@ -5,6 +5,7 @@
 #define ASCII_NUM_DIS 48
 #define ASCIIWIDTH 40
 #define ASCIIHEIGHT 20
+#define TUIHIGHT 24
 #define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
 
 static string128 asciiContainer[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];

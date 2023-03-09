@@ -6,7 +6,7 @@ void clearTUI(void)
 {
     static string128 output;
     strinit("", &output);
-    for(int i = ASCIIHEIGHT; i>0; --i){
+    for(int i = TUIHIGHT; i>0; --i){
         straddChar(&output,'\n');
         straddChar(&output,'\r');
     }
@@ -27,9 +27,9 @@ void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT
 }
 
 void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
-	for (int i = 0; i < p; i++) {
+	for (int i = p; i > 0; i--) {
 		sendString(&asciiCon[i]);
-		sleep(1);
+		//sleep(1);
 	};
 }
 
