@@ -18,6 +18,7 @@
 #include <stdint.h>
 
 #define MINWORDLENGTH 5
+static int seed;
 
 static void userInput(string128 *input)
 {
@@ -122,12 +123,11 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		clearTUI();
 
 		if(guessFailed){
-			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
+			randomExpandAsciiArt(asciiContainer, asciiBuffer, seed);
 		}else{
 			round--;
 		}
-		// Output ASCII Art and current guessed word e.g H _ _ g m _ _ 
-		expandAsciArt(asciiContainer, asciiBuffer, asciiLines);
+		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
 		strinit("\n\r", output);
 		stradd(output, guess->content);
 		sendString(output);
@@ -138,6 +138,9 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 void main(void)
 {
 	static string128 output, word, guess;
+
+	//seed with timestamps
+	seed = 1;
 
 	// First time Initialization 
 	asciiToString(asciiContainer, asciiBuffer, asciiTitel);
