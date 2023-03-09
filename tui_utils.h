@@ -66,7 +66,7 @@ int stringDigitsToInt(const string128 *s);
 // The same principle only dividing by 10 / modulu by 10
 void intToString(int n, string128 *s);
 
-int getDigiCount(int n);
+int getDigitsCount(int n);
 
 // {base} power of {exp}
 int power(int base, int exp);

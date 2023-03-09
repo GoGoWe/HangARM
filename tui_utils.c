@@ -57,7 +57,7 @@ int charDigitToInt(const char c)
     return c - ASCII_NUM_DIS;
 }
 
-int getDigiCount(int n)
+int getDigitsCount(int n)
 {
     int dc = 0;
     do
@@ -87,14 +87,16 @@ int stringDigitsToInt(const string128 *s)
 // TODO: after 9 the digits are printed in wrong order 13 => 31
 void intToString(int n, string128 *s)
 {
-    int temp = 0;
-    int len = getDigiCount(n);
+    strclear(s);
 
+    int temp = 0;
+    int len = getDigitsCount(n);
+    s->length = len;
+    
     do
     {
         temp = n % 10;
-        straddChar(s, temp + ASCII_NUM_DIS);
-        //s->content[len - 1] = temp + 48;
+        s->content[len - 1] = temp + 48;
 
         n = n / 10;
         --len;

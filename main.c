@@ -74,66 +74,97 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 	}
 }
 
+void statistics(const int fails, string128 *digits, string128 *output){
+
+	clearTUI();
+	strinit("\n\rNumber of tries: ", output);
+	strcomb(output, digits);
+	sendString(output);
+	strclear(digits);
+
+	strinit("\n\rNumber of fails: ", output);
+	intToString(fails, digits);
+	strcomb(output, digits);
+	sendString(output);
+
+	strclear(output);
+}
+
 // returns 1 on won game, 0 on lost game
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
-	string128 digits, input;
-	int asciiLines = 0; // Bool to determinate if input was wrong
-	int guessFailed = 0;
+	string128 digits, input, pastInputs;
+	int guessFailed = 0; // Bool to determinate if input was wrong
+	int asciiLines = 0; 
+	int round = 1;
 
-	for (int round = 1; round <= NUMBEROFROUNDS;)
+	for (int fails = 0; fails < NUMBEROFROUNDS;)
 	{
 		guessFailed = 1; 
-		// optimize with an insert/replace function
-		strinit("\n\rTry Number ", output);
+
+		strinit("\n\rRound Number ", output);
 		strclear(&digits);
-		intToString(round-1, &digits);
+		intToString(round, &digits);
 		strcomb(output, &digits);
-		stradd(output, ":\n\rInput your guess:");
+		stradd(output, "\n\rInput your guess:");
 		sendString(output);
+		strclear(output);
+
 		// insert
 		userInput(&input, 1);
 		if(input.content[input.length-1] == '\e'){
-			strinit("Times up!\n\r", output);
-			sendString(output);
+			strinit("\n\rTimes up!\n\r", output);
 		}
 		else if(input.length == 1)
 		{
-			signed int pos = strfind(word, input.content[0], 0);
-			while (pos != -1)
-			{
-				guessFailed = 0;
-				strrepc(guess, input.content[0], pos);
-				pos = strfind(word, input.content[0], pos + 1);
+			if(strfind(&pastInputs, input.content[0], 0) != -1){
+				strinit("\n\rYou already typed this letter in!\n\r", output);
 			}
-			if (pos == -1 && strfind(guess, '_', 0) == -1)
+			else
 			{
-				return 1;
+				strinit("\n\rNop, that was wrong.\n\r", output);
+				straddChar(&pastInputs, input.content[0]);
+				signed int pos = strfind(word, input.content[0], 0);
+				while (pos != -1)
+				{
+					guessFailed = 0;
+					strinit("\n\rThat was a match!\n\r", output);
+
+					strrepc(guess, input.content[0], pos);
+					pos = strfind(word, input.content[0], pos + 1);
+				}
+				if (pos == -1 && strfind(guess, '_', 0) == -1)
+				{
+					statistics(fails, &digits, output);
+					return 1;
+				}
 			}
 		}
 		else if(input.length == word->length)
 		{
 			if (strqal(word, &input))
 			{
+				statistics(fails, &digits, output);
 				return 1;
 			}
 		}
 		else{
-			strinit("Ahh, guessed to early, this word was wrong!", output);
-			sendString(output);
+			strinit("\n\rAhh, guessed to early, this word was wrong!\n\r", output);
 		}
 
 		if(guessFailed){
-			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
-			round++;
+			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - fails);
+			fails++;
 		}
+		round++;
 		// Output ASCII Art and current guessed word e.g H _ _ g m _ _ 
 		clearTUI();
 		expandAsciArt(asciiContainer, asciiLines);
-		//strinit("\n\r", output);
-		//stradd(output, guess->content);
-		sendString(guess);
+		stradd(output, guess->content);
+		sendString(output);
 	}
+	expandAsciArt(asciiContainer, ASCIIHEIGHT);
+	statistics(10, &digits, output);
 	return 0;
 }
 
@@ -149,21 +180,23 @@ void main(void)
 	//expandAsciArt(asciiContainer, asciiTitle);
 
 
+	do{
+		startWord(&word, &guess, &output);
+		
+		if (guessWord(&word, &guess, &output))
+		{
+			strinit("\n\rYou won! Word was: ", &output);
+			stradd(&output, word.content);
+		}
+		else
+		{
+			strinit("\n\rYou Lost! The word was: ", &output);
+			stradd(&output, word.content);
+		}
+		sendString(&output);
 
-	startWord(&word, &guess, &output);
-	
-	if (guessWord(&word, &guess, &output))
-	{
-		clearTUI();
-		strinit("\n\rYou won! Word was: ", &output);
-		stradd(&output, word.content);
-	}
-	else
-	{
-		clearTUI();
-		expandAsciArt(asciiContainer, ASCIIHEIGHT);
-		strinit("\n\rYou Lost! The word was: ", &output);
-		stradd(&output, word.content);
-	}
-	sendString(&output);
+		strinit("\n\rPress a key if you want to play again\n\r", &output);
+		sendString(&output);
+		userInput(&output, 0);
+	}while(1);
 }
