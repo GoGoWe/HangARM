@@ -15,6 +15,7 @@
 #include "hal.h"
 #include "tui_utils.h"
 #include "string.h"
+#include "random.h"
 #include <stdint.h>
 
 #define NUMBEROFROUNDS 10
@@ -76,7 +77,7 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 }
 
 // returns 1 on won game, 0 on lost game
-int guessWord(const string128 *word, string128 *guess, string128 *output)
+static int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input;
 	int asciiLines = 0; 
@@ -121,6 +122,24 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		sendString(output);
 	}
 	return 0;
+}
+
+static void expandRandomAsciArt(string128 *art, string128 *buffer, int try) {
+	static int setChars;
+	int perRound = ASCIISIZE / NUMBEROFROUNDS;
+	float p = (ASCIISIZE - setChars) / ASCIISIZE;
+	int fillTrys = perRound / p;
+	for (int i = 0; i > fillTrys; i++) {
+		int c = random(0, ASCIIWIDTH - 1);
+		int r = random(0, ASCIIHEIGHT - 1);
+		if (buffer[r].content[c] == '\0') {
+			buffer[r].content[c] = art[r].content[c];
+			setChars++;
+		}
+		if (perRound * try == setChars) {
+			break;
+		}
+	}
 }
 
 void main(void)
