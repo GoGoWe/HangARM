@@ -16,7 +16,7 @@ void sendChar( const char );
 void sendString(const string128 *s);
 
 // Input Routines:
-char readChar(void);
+char readChar(int useTimeout);
 
 // Generic Register-Access:
 void writeToRegister(address a, uint32_t value);

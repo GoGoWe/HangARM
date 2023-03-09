@@ -32,7 +32,7 @@ static char asciiArt[ASCIISIZE] =
 "MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 
-static char asciiTitel[800] =
+static char asciiTitle[800] =
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 "dP                              MMP\"\"\"\"\"\"\"MMMM\"\"\"\"\"\"\"`MMM\"\"\"\"\"`\'\"\"\"`YM   "
 "88                              M' .mmmm  MMMM  mmmm,  MM  mm.  mm.  M   "
@@ -47,7 +47,7 @@ static char asciiTitel[800] =
 
 void clearTUI(void);
 void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt);
-void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p);
+void expandAsciArt(const string128 art[ASCIIHEIGHT], int p);
 
 
 // Converts a char {c} NUMBER to an valid integer

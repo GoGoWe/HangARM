@@ -26,7 +26,7 @@ void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT
 	}
 }
 
-void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p) {
+void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], int p) {
 	for (int i = p; i > 0; i--) {
 		sendString(&asciiCon[i]);
 		//sleep(1);
