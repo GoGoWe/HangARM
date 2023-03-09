@@ -15,10 +15,8 @@
 #include "hal.h"
 #include "tui_utils.h"
 #include "string.h"
-#include "random.h"
 #include <stdint.h>
 
-#define NUMBEROFROUNDS 10
 #define MINWORDLENGTH 5
 
 static void userInput(string128 *input)

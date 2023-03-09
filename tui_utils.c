@@ -1,6 +1,7 @@
 #include "tui_utils.h"
 #include "string.h"
 #include "hal.h"
+#include "random.h"
 
 void clearTUI(void)
 {
@@ -31,6 +32,21 @@ void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCII
 		sendString(&asciiCon[i]);
 		//sleep(1);
 	};
+}
+
+void randomExpandAsciiArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int seed) {
+	static int filledFields;
+	float pHitField = (ASCIISIZE - filledFields) / ASCIISIZE;
+	int maxFillsPerRound = ASCIISIZE / NUMBEROFROUNDS;
+	int attempts = maxFillsPerRound / pHitField;
+	for (int i = 0; i > attempts; i++) {
+		int c = random(seed, 0, ASCIIWIDTH);
+		int r = random(seed, 0, ASCIIHEIGHT);
+		if (buffer[c].content[r] == '\0') {
+			filledFields++;
+			buffer[c].content[r] = asciiCon[c].content[r];
+		}
+	}
 }
 
 int power(int base, int exp)

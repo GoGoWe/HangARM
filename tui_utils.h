@@ -7,6 +7,7 @@
 #define ASCIIHEIGHT 20
 #define TUIHIGHT 24
 #define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
+#define NUMBEROFROUNDS 10
 
 static string128 asciiContainer[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
 
@@ -48,6 +49,7 @@ static char asciiTitel[800] =
 void clearTUI(void);
 void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt);
 void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p);
+void randomExpandAsciiArt(const string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int seed);
 
 
 // Converts a char {c} NUMBER to an valid integer
