@@ -98,6 +98,9 @@ void statistics(const int fails, string128 *digits, string128 *output){
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input, pastInputs;
+	strclear(&digits);
+	strclear(&input);
+	strclear(&pastInputs);
 	int guessFailed = 0; // Bool to determinate if input was wrong
 	int asciiLines = 0; 
 	int round = 1;
@@ -167,8 +170,8 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		stradd(output, guess->content);
 		sendString(output);
 	}
-	expandAsciArt(asciiContainer, ASCIIHEIGHT);
 	statistics(10, &digits, output);
+	expandAsciArt(asciiContainer, ASCIIHEIGHT);
 	return 0;
 }
 
@@ -203,7 +206,7 @@ void main(void)
 
 		strinit("\n\rPress a enter if you want to play again\n\r", &output);
 		sendString(&output);
-		userInput(&output, 0);
+		readChar(0);
 		clearTUI();
 	}while(1);
 }
