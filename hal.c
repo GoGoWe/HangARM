@@ -53,10 +53,11 @@ void timerInit(void) {
     writeToRegister(SYST_CSR, 0x00000007);
 }
 
+// TODO: See comment
 void setupTimer(const ms10 targetTimeout) {
     timeoutHit = 0;
     currentTimeout = targetTimeout;
-    targetTicks = currentTimeout + ticks;   // TODO: Hier müssen die Ticks resetet werden irgendwann läuft dir der Int voll
+    targetTicks = currentTimeout + ticks;   // Hier müssen die Ticks resetet werden irgendwann läuft dir der Int voll
 }
 
 void resetTimer() {

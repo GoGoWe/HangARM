@@ -10,7 +10,7 @@ typedef int ms10;
 // for Init the UART:
 void uartInit(void);
 
-// Outtput Routines:
+// Output Routines:
 void sendInt( const int);
 void sendChar( const char );
 void sendString(const string128 *s);

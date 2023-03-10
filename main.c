@@ -174,18 +174,18 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 
 void main(void)
 {
+	// First time Initialization 
+	static string128 output, word, guess;
+	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+	timerInit();
+	uartInit();
+	strinit("Welcome to HangARM!", &output);
+	sendString(&output);
+
 	do{
-		static string128 output, word, guess;
 		strclear(&output);
 		strclear(&word);
 		strclear(&guess);
-
-		// First time Initialization 
-		asciiToString(asciiContainer, asciiBuffer, asciiArt);
-		timerInit();
-		uartInit();
-
-		//expandAsciArt(asciiContainer, asciiTitle);
 
 		startWord(&word, &guess, &output);
 		
