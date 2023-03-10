@@ -5,12 +5,13 @@
 void clearTUI(void)
 {
     static string128 output;
-    strinit("\033[2J", &output);
+
+    for(int i = TUIHIGHT; i>0; --i){
+        straddChar(&output,'\n');
+        straddChar(&output,'\r');
+    }
     sendString(&output);
-    strclear(&output);
-    strinit("\033[H", &output);
-    sendString(&output);
-}// TODO: Does not work right
+}
 
 // TODO: Change this this way you can print more than one ASCII Art
 //       Additionally the asciiContainer can not be cleared make this
@@ -87,7 +88,6 @@ int stringDigitsToInt(const string128 *s)
     return num;
 }
 
-// TODO: after 9 the digits are printed in wrong order 13 => 31
 void intToString(int n, string128 *s)
 {
     strclear(s);

@@ -35,9 +35,10 @@ static void userInput(string128 *input, int useTimeout)
 		if (currentInput == 18) {
 			straddChar(input, '\e');
 			break;
-		} // TODO: You are checking a wrong range some inputs like ,.- or arrows are still possible
+		}
 		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
 		{
+			continue;
 			//sendChar('\a');
 		}
 		else if (currentInput < 91)
@@ -51,8 +52,7 @@ static void userInput(string128 *input, int useTimeout)
 			sendChar(currentInput);
 			straddChar(input, currentInput);
 		}
-
-	} while (input->length != 0 && currentInput != '\r' && input->length < 128);
+	} while ((currentInput != '\r' || input->length == 0) && input->length < 128);
 	sendChar('\n');
 	sendChar('\r');
 }
@@ -63,7 +63,7 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 	sendString(output);
 	userInput(word, 0);
 
-	while (MINWORDLENGTH > word->length > MAXWORDLENGHT)
+	while (MINWORDLENGTH > word->length || word->length > MAXWORDLENGHT)
 	{
 		strinit("Word size is not in the range! Input a new one:\n\r", output);
 		sendString(output);
