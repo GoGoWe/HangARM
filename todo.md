@@ -1,6 +1,12 @@
+--OPTIONAL--
+random word selection
 random printing
-
-write a doc.md
-
+repair ascii printing for multiply ascii art
 remove character with backspace
+
+--IMPORTANT--
+document and refactor: Gabriel
+write a doc.md
+reset timer because of overflow(?): Lennart
+
 
