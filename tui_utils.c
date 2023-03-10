@@ -5,14 +5,17 @@
 void clearTUI(void)
 {
     static string128 output;
-    strinit("", &output);
-    for(int i = TUIHIGHT; i>0; --i){
-        straddChar(&output,'\n');
-        straddChar(&output,'\r');
-    }
+    strinit("\033[2J", &output);
     sendString(&output);
-}
+    strclear(&output);
+    strinit("\033[H", &output);
+    sendString(&output);
+}// TODO: Does not work right
 
+// TODO: Change this this way you can print more than one ASCII Art
+//       Additionally the asciiContainer can not be cleared make this
+//       the same way as the String126 struct so that it can be created
+//       with different sizes and reinisilized when the game starts over
 void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt) {
 	for(int h = 0; h < ASCIIHEIGHT; h++) {
 		for(int w = 0; w < ASCIIWIDTH; w++) {

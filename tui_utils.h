@@ -60,10 +60,7 @@ int stringDigitsToInt(const string128 *s);
 
 
 // Converts a ONE DIGIT int {n} to an valid char number
-// unhandeld output if {n} is not a number from 0-9
-
-// TODO: There is an equevilant function needed like stringDigitsToInt
-// The same principle only dividing by 10 / modulu by 10
+// unhandled output if {n} is not a number from 0-9
 void intToString(int n, string128 *s);
 
 int getDigitsCount(int n);

@@ -19,10 +19,13 @@
 
 #define NUMBEROFROUNDS 10
 #define MINWORDLENGTH 5
-#define MAXWORDLENGHT 5
+#define MAXWORDLENGHT 18
+
+// TODO: implement random word generation
 
 static void userInput(string128 *input, int useTimeout)
 {
+	int pressedKeys = 0; // TODO: Implement remvoing chars
 	char currentInput;
 	strclear(input);
 
@@ -32,10 +35,10 @@ static void userInput(string128 *input, int useTimeout)
 		if (currentInput == 18) {
 			straddChar(input, '\e');
 			break;
-		}
+		} // TODO: You are checking a wrong range some inputs like ,.- or arrows are still possible
 		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
 		{
-			sendChar('\b');
+			//sendChar('\a');
 		}
 		else if (currentInput < 91)
 		{
@@ -48,6 +51,7 @@ static void userInput(string128 *input, int useTimeout)
 			sendChar(currentInput);
 			straddChar(input, currentInput);
 		}
+
 	} while (input->length != 0 && currentInput != '\r' && input->length < 128);
 	sendChar('\n');
 	sendChar('\r');
@@ -170,17 +174,19 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 
 void main(void)
 {
-	static string128 output, word, guess;
-
-	// First time Initialization 
-	asciiToString(asciiContainer, asciiBuffer, asciiArt);
-	timerInit();
-	uartInit();
-
-	//expandAsciArt(asciiContainer, asciiTitle);
-
-
 	do{
+		static string128 output, word, guess;
+		strclear(&output);
+		strclear(&word);
+		strclear(&guess);
+
+		// First time Initialization 
+		asciiToString(asciiContainer, asciiBuffer, asciiArt);
+		timerInit();
+		uartInit();
+
+		//expandAsciArt(asciiContainer, asciiTitle);
+
 		startWord(&word, &guess, &output);
 		
 		if (guessWord(&word, &guess, &output))
@@ -195,8 +201,9 @@ void main(void)
 		}
 		sendString(&output);
 
-		strinit("\n\rPress a key if you want to play again\n\r", &output);
+		strinit("\n\rPress a enter if you want to play again\n\r", &output);
 		sendString(&output);
 		userInput(&output, 0);
+		clearTUI();
 	}while(1);
 }
