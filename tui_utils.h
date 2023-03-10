@@ -32,7 +32,7 @@ static char asciiArt[ASCIISIZE] =
 "MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 
-static char asciiTitel[800] =
+static char asciiTitle[800] =
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 "dP                              MMP\"\"\"\"\"\"\"MMMM\"\"\"\"\"\"\"`MMM\"\"\"\"\"`\'\"\"\"`YM   "
 "88                              M' .mmmm  MMMM  mmmm,  MM  mm.  mm.  M   "
@@ -47,7 +47,7 @@ static char asciiTitel[800] =
 
 void clearTUI(void);
 void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt);
-void expandAsciArt(const string128 art[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], int p);
+void expandAsciArt(const string128 art[ASCIIHEIGHT], int p);
 
 
 // Converts a char {c} NUMBER to an valid integer
@@ -60,13 +60,10 @@ int stringDigitsToInt(const string128 *s);
 
 
 // Converts a ONE DIGIT int {n} to an valid char number
-// unhandeld output if {n} is not a number from 0-9
-
-// TODO: There is an equevilant function needed like stringDigitsToInt
-// The same principle only dividing by 10 / modulu by 10
+// unhandled output if {n} is not a number from 0-9
 void intToString(int n, string128 *s);
 
-int getDigiCount(int n);
+int getDigitsCount(int n);
 
 // {base} power of {exp}
 int power(int base, int exp);

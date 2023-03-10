@@ -53,10 +53,11 @@ void timerInit(void) {
     writeToRegister(SYST_CSR, 0x00000007);
 }
 
+// TODO: See comment
 void setupTimer(const ms10 targetTimeout) {
     timeoutHit = 0;
     currentTimeout = targetTimeout;
-    targetTicks = currentTimeout + ticks;
+    targetTicks = currentTimeout + ticks;   // Hier müssen die Ticks resetet werden irgendwann läuft dir der Int voll
 }
 
 void resetTimer() {
@@ -69,7 +70,7 @@ void sleep(const ms10 s) {
     while(!timeoutHit);
 }
 
-void uartInit( void )
+void uartInit(void)
 {
     // Enable FIFO:
     // LCRH <-- LCRH_FEN
@@ -95,15 +96,16 @@ void sendString(const string128 *s) {
     }
 }
 
-char readChar(void)
+char readChar(int useTimeout)
 {
     uint32_t dataRegister;
 
+    setupTimer(USERTIMEOUTMS10);
+
     // FE = "FIFO EMPTY"
     // Active wait for not Empty fifo
-    setupTimer(USERTIMEOUTMS10);
     while ( readFromRegister( UARTDR + 0x18 ) & 0x10) {
-        if (timeoutHit) {
+        if (useTimeout && timeoutHit) {
             return (char)18;
         }
     };

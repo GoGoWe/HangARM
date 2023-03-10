@@ -19,27 +19,27 @@
 
 #define NUMBEROFROUNDS 10
 #define MINWORDLENGTH 5
+#define MAXWORDLENGHT 18
 
-static void userInput(string128 *input)
+// TODO: implement random word generation
+
+static void userInput(string128 *input, int useTimeout)
 {
+	int pressedKeys = 0; // TODO: Implement remvoing chars
 	char currentInput;
 	strclear(input);
 
 	do
 	{
-		currentInput = readChar();
+		currentInput = readChar(useTimeout);
 		if (currentInput == 18) {
 			straddChar(input, '\e');
-			string128 output;
-			strinit("Times up!\n\r", &output);
-			sendString(&output);
 			break;
 		}
 		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
 		{
-#ifdef WITHBELL
-			sendChar('\b');
-#endif
+			continue;
+			//sendChar('\a');
 		}
 		else if (currentInput < 91)
 		{
@@ -52,19 +52,22 @@ static void userInput(string128 *input)
 			sendChar(currentInput);
 			straddChar(input, currentInput);
 		}
-	} while (input->length != 0 && currentInput != '\r' && input->length < 128);
+	} while ((currentInput != '\r' || input->length == 0) && input->length < 128);
 	sendChar('\n');
 	sendChar('\r');
 }
 
 static void startWord(string128 *word, string128 *guess, string128 *output)
 {
-	userInput(word);
-	while (word->length < MINWORDLENGTH)
+	strinit("Please enter your Word: \n\r", output);
+	sendString(output);
+	userInput(word, 0);
+
+	while (MINWORDLENGTH > word->length || word->length > MAXWORDLENGHT)
 	{
-		strinit("Word to short! Input a new one:\n\r", output);
+		strinit("Word size is not in the range! Input a new one:\n\r", output);
 		sendString(output);
-		userInput(word);
+		userInput(word, 0);
 	}
 	clearTUI();
 
@@ -75,89 +78,135 @@ static void startWord(string128 *word, string128 *guess, string128 *output)
 	}
 }
 
+void statistics(const int fails, string128 *digits, string128 *output){
+
+	clearTUI();
+	strinit("\n\rNumber of tries: ", output);
+	strcomb(output, digits);
+	sendString(output);
+	strclear(digits);
+
+	strinit("\n\rNumber of fails: ", output);
+	intToString(fails, digits);
+	strcomb(output, digits);
+	sendString(output);
+
+	strclear(output);
+}
+
 // returns 1 on won game, 0 on lost game
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
-	string128 digits, input;
-	int asciiLines = 0; // Bool to determinate if input was wrong
-	int guessFailed = 0;
+	string128 digits, input, pastInputs;
+	strclear(&digits);
+	strclear(&input);
+	strclear(&pastInputs);
+	int guessFailed = 0; // Bool to determinate if input was wrong
+	int asciiLines = 0; 
+	int round = 1;
 
-	for (int round = 1; round <= NUMBEROFROUNDS; round++)
+	for (int fails = 0; fails < NUMBEROFROUNDS;)
 	{
 		guessFailed = 1; 
-		// optimize with an insert/replace function
-		strinit("\n\rTry Number ", output);
+
+		strinit("\n\rRound Number ", output);
 		strclear(&digits);
-		intToString(round-1, &digits);
+		intToString(round, &digits);
 		strcomb(output, &digits);
-		stradd(output, ":\n\rInput your guess:");
+		stradd(output, "\n\rInput your guess:");
 		sendString(output);
+		strclear(output);
+
 		// insert
-		userInput(&input);
-		if (input.length == 1 && input.content[0] != '\e')
+		userInput(&input, 1);
+		if(input.content[input.length-1] == '\e'){
+			strinit("\n\rTimes up!\n\r", output);
+		}
+		else if(input.length == 1)
 		{
-			signed int pos = strfind(word, input.content[0], 0);
-			while (pos != -1)
-			{
-				guessFailed = 0;
-				strrepc(guess, input.content[0], pos);
-				pos = strfind(word, input.content[0], pos + 1);
+			if(strfind(&pastInputs, input.content[0], 0) != -1){
+				strinit("\n\rYou already typed this letter in!\n\r", output);
 			}
-			if (pos == -1 && strfind(guess, '_', 0) == -1)
+			else
 			{
-				return 1;
+				strinit("\n\rNop, that was wrong.\n\r", output);
+				straddChar(&pastInputs, input.content[0]);
+				signed int pos = strfind(word, input.content[0], 0);
+				while (pos != -1)
+				{
+					guessFailed = 0;
+					strinit("\n\rThat was a match!\n\r", output);
+
+					strrepc(guess, input.content[0], pos);
+					pos = strfind(word, input.content[0], pos + 1);
+				}
+				if (pos == -1 && strfind(guess, '_', 0) == -1)
+				{
+					statistics(fails, &digits, output);
+					return 1;
+				}
 			}
 		}
 		else if(input.length == word->length)
 		{
 			if (strqal(word, &input))
 			{
+				statistics(fails, &digits, output);
 				return 1;
 			}
 		}
-		clearTUI();
+		else{
+			strinit("\n\rAhh, guessed to early, this word was wrong!\n\r", output);
+		}
 
 		if(guessFailed){
-			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - round);
-		}else{
-			round--;
+			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - fails);
+			fails++;
 		}
+		round++;
 		// Output ASCII Art and current guessed word e.g H _ _ g m _ _ 
-		expandAsciArt(asciiContainer, asciiBuffer, asciiLines);
-		strinit("\n\r", output);
+		clearTUI();
+		expandAsciArt(asciiContainer, asciiLines);
 		stradd(output, guess->content);
 		sendString(output);
 	}
+	statistics(10, &digits, output);
+	expandAsciArt(asciiContainer, ASCIIHEIGHT);
 	return 0;
 }
 
 void main(void)
 {
-	static string128 output, word, guess;
-
 	// First time Initialization 
+	static string128 output, word, guess;
 	asciiToString(asciiContainer, asciiBuffer, asciiArt);
 	timerInit();
 	uartInit();
+	strinit("Welcome to HangARM!", &output);
+	sendString(&output);
 
-	strinit("Welcome to HangARM!\n\r", &output);
-	sendString(&output);
-	strinit("Please enter your Word: \n\r", &output);
-	sendString(&output);
-	startWord(&word, &guess, &output);
-	
-	if (guessWord(&word, &guess, &output))
-	{
+	do{
+		strclear(&output);
+		strclear(&word);
+		strclear(&guess);
+
+		startWord(&word, &guess, &output);
+		
+		if (guessWord(&word, &guess, &output))
+		{
+			strinit("\n\rYou won! Word was: ", &output);
+			stradd(&output, word.content);
+		}
+		else
+		{
+			strinit("\n\rYou Lost! The word was: ", &output);
+			stradd(&output, word.content);
+		}
+		sendString(&output);
+
+		strinit("\n\rPress a enter if you want to play again\n\r", &output);
+		sendString(&output);
+		readChar(0);
 		clearTUI();
-		strinit("\n\rYou won! Word was: ", &output);
-		stradd(&output, word.content);
-	}
-	else
-	{
-		clearTUI();
-		expandAsciArt(asciiContainer, asciiBuffer, ASCIIHEIGHT);
-		strinit("\n\rYou Lost! The word was: ", &output);
-		stradd(&output, word.content);
-	}
-	sendString(&output);
+	}while(1);
 }

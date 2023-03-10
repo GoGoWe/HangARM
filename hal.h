@@ -10,13 +10,13 @@ typedef int ms10;
 // for Init the UART:
 void uartInit(void);
 
-// Outtput Routines:
+// Output Routines:
 void sendInt( const int);
 void sendChar( const char );
 void sendString(const string128 *s);
 
 // Input Routines:
-char readChar(void);
+char readChar(int useTimeout);
 
 // Generic Register-Access:
 void writeToRegister(address a, uint32_t value);
