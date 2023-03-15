@@ -23,6 +23,7 @@
 
 // TODO: implement random word generation
 
+
 static void userInput(string128 *input, int useTimeout)
 {
 	int pressedKeys = 0; // TODO: Implement remvoing chars
@@ -160,7 +161,7 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		}
 
 		if(guessFailed){
-			asciiLines = asciiLines + (ASCIIHEIGHT - asciiLines) / (NUMBEROFROUNDS - fails);
+			asciiLines = asciiLines + (gallowsHeight - asciiLines) / (NUMBEROFROUNDS - fails);
 			fails++;
 		}
 		round++;
@@ -171,7 +172,7 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		sendString(output);
 	}
 	statistics(10, &digits, output);
-	expandAsciArt(asciiContainer, ASCIIHEIGHT);
+	expandAsciArt(asciiContainer, gallowsHeight);
 	return 0;
 }
 
@@ -179,7 +180,7 @@ void main(void)
 {
 	// First time Initialization 
 	static string128 output, word, guess;
-	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+	asciiToString(asciiContainer, asciiBuffer, gallowAsciiArt, gallowsWidth, gallowsHeight);
 	timerInit();
 	uartInit();
 	strinit("Welcome to HangARM!", &output);

@@ -3,14 +3,16 @@
 #include <stdint.h>
 #include "string.h"
 #define ASCII_NUM_DIS 48
-#define ASCIIWIDTH 40
-#define ASCIIHEIGHT 20
 #define TUIHIGHT 24
-#define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
 
-static string128 asciiContainer[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
+static string128 asciiContainer[TUIHIGHT], asciiBuffer[TUIHIGHT];
+// gallow is the asciiart, that shows up, when the user makes a wrong guess
+static const int gallowsHeight = 20, gallowsWidth = 40;
+// title is the title ascii art, displazed at the beginning of the game
+static const int titleHeight = 10, titleWidth = 73;
 
-static char asciiArt[ASCIISIZE] =
+// h:20; w:40
+static char gallowAsciiArt[801] =
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
 "MMMMMMMMMMKXKXXNNWMMMMMMMMMMMMMMMMMMMMMM"
@@ -32,7 +34,8 @@ static char asciiArt[ASCIISIZE] =
 "MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 
-static char asciiTitle[800] =
+// h:10; w:73
+static char asciiTitle[731] =
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 "dP                              MMP\"\"\"\"\"\"\"MMMM\"\"\"\"\"\"\"`MMM\"\"\"\"\"`\'\"\"\"`YM   "
 "88                              M' .mmmm  MMMM  mmmm,  MM  mm.  mm.  M   "
@@ -46,8 +49,9 @@ static char asciiTitle[800] =
 
 
 void clearTUI(void);
-void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt);
-void expandAsciArt(const string128 art[ASCIIHEIGHT], int p);
+
+void asciiToString(string128 *asciiCon, string128 *buffer, const char *asciiArt, int width, int height);
+void expandAsciArt(const string128 *art, int p);
 
 
 // Converts a char {c} NUMBER to an valid integer
