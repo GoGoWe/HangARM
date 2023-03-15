@@ -14,14 +14,14 @@ void clearTUI(void)
 }
 
 void asciiToString(string128 *asciiCon, string128 *buffer, const char *asciiArt, int width, int height) {
-	for(int h = 0; h < height; h++) {
-		for(int w = 0; w < width; w++) {
+	for(int h = 0; h < height + 1; h++) {
+		for(int w = 0; w < width + 1; w++) {
 			asciiCon[h].content[w] = asciiArt[h * height + w];
 			buffer[h].content[w] = '\0';
 		}
 		straddChar(&asciiCon[h], '\n');
 		straddChar(&asciiCon[h], '\r');
-		asciiCon[h].length = 40;
+		asciiCon[h].length = width;
 		buffer[h].length = 0;
 	}
 }
