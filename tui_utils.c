@@ -2,6 +2,10 @@
 #include "string.h"
 #include "hal.h"
 
+/**
+ * @brief pushes the current content out of frame
+ * 
+ */
 void clearTUI(void)
 {
     static string128 output;
@@ -17,6 +21,13 @@ void clearTUI(void)
 //       Additionally the asciiContainer can not be cleared make this
 //       the same way as the String126 struct so that it can be created
 //       with different sizes and reinisilized when the game starts over
+/**
+ * @brief converts an asciiart to a string128 array for usage with string library
+ * 
+ * @param asciiCon 
+ * @param buffer 
+ * @param asciiArt 
+ */
 void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt) {
 	for(int h = 0; h < ASCIIHEIGHT; h++) {
 		for(int w = 0; w < ASCIIWIDTH; w++) {
@@ -30,6 +41,12 @@ void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT
 	}
 }
 
+/**
+ * @brief prints asci art from the bottom
+ * 
+ * @param asciiCon 
+ * @param p 
+ */
 void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], int p) {
 	for (int i = p; i > 0; i--) {
 		sendString(&asciiCon[i]);
@@ -37,6 +54,13 @@ void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], int p) {
 	};
 }
 
+/**
+ * @brief like pow()
+ * 
+ * @param base 
+ * @param exp 
+ * @return int 
+ */
 int power(int base, int exp)
 {
     if (exp < 0)
@@ -56,11 +80,23 @@ int power(int base, int exp)
     return result;
 }
 
+/**
+ * @brief returns the numeric representation of a number char
+ * 
+ * @param c 
+ * @return int 
+ */
 int charDigitToInt(const char c)
 {
     return c - ASCII_NUM_DIS;
 }
 
+/**
+ * @brief return the number of digits needed to represent an int as a string
+ * 
+ * @param n 
+ * @return int 
+ */
 int getDigitsCount(int n)
 {
     int dc = 0;
@@ -72,6 +108,12 @@ int getDigitsCount(int n)
     return dc;
 }
 
+/**
+ * @brief converts a string to a numeric representation
+ * 
+ * @param s 
+ * @return int 
+ */
 int stringDigitsToInt(const string128 *s)
 {
     int num = 0;
@@ -88,6 +130,12 @@ int stringDigitsToInt(const string128 *s)
     return num;
 }
 
+/**
+ * @brief converts an int to its string representation
+ * 
+ * @param n 
+ * @param s 
+ */
 void intToString(int n, string128 *s)
 {
     strclear(s);

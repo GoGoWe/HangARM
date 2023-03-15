@@ -5,6 +5,10 @@
 static const uint32_t UARTDR = 0x4000C000;
 
 typedef uint32_t address;
+/**
+ * @brief 10ms unit as abstraction for systicks
+ * 
+ */
 typedef int ms10;
 
 // for Init the UART:

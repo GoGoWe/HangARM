@@ -46,6 +46,10 @@ void SysTick_Handler() {
     }
 }
 
+/**
+ * @brief to initialize the sysclock
+ * 
+ */
 void timerInit(void) {
     long clockTicks = FREQ_MHZ * 10000; //10ms
     writeToRegister(SYST_RL, clockTicks);
@@ -53,18 +57,31 @@ void timerInit(void) {
     writeToRegister(SYST_CSR, 0x00000007);
 }
 
-// TODO: See comment
+/**
+ * @brief Setup a timer. Only one timer can be active at the same time. In case of a tick overflow, this should still work.
+ * 
+ * @param targetTimeout 
+ */
 void setupTimer(const ms10 targetTimeout) {
     timeoutHit = 0;
     currentTimeout = targetTimeout;
-    targetTicks = currentTimeout + ticks;   // Hier müssen die Ticks resetet werden irgendwann läuft dir der Int voll
+    targetTicks = currentTimeout + ticks;
 }
 
+/**
+ * @brief resets the current timer to its initial value
+ * 
+ */
 void resetTimer() {
     timeoutHit = 0;
     targetTicks = currentTimeout + ticks;
 }
 
+/**
+ * @brief holds programm for given time
+ * 
+ * @param s 
+ */
 void sleep(const ms10 s) {
     setupTimer(s);
     while(!timeoutHit);
