@@ -7,12 +7,6 @@
 #define SYST_CVR    0xE000E018
 #define SYST_CALIB  0xE000E01C
 
-static ms10 ticks;
-static ms10 targetTicks;
-static ms10 currentTimeout;
-// 1 if timeout
-static int timeoutHit;
-
 void writeToRegister(address a, uint32_t value)
 {
     uint32_t *pointer_to_address;

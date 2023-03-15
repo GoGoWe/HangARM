@@ -1,4 +1,4 @@
-// author: Lennart Schuster
+// author: Lennart Schuster, Gabriel Wuwer
 #ifndef STRING128
 #define STRING128
 

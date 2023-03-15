@@ -3,7 +3,8 @@
         "*.json": "json",
         "stdint.h": "c",
         "string.h": "c",
-        "tui_utils.h": "c"
+        "tui_utils.h": "c",
+        "random.h": "c"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"

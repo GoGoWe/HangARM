@@ -1,11 +1,19 @@
+#ifndef HAL_H
+#define HAL_H
+
 #include <stdint.h>
 #include "string.h"
 
 #define USERTIMEOUTMS10 1000
-static const uint32_t UARTDR = 0x4000C000;
-
 typedef uint32_t address;
 typedef int ms10;
+
+static const uint32_t UARTDR = 0x4000C000;
+
+static ms10 ticks;
+static ms10 targetTicks;
+static ms10 currentTimeout;
+static int timeoutHit; // 1 if timeout
 
 // for Init the UART:
 void uartInit(void);
@@ -28,3 +36,5 @@ void setupTimer(const ms10 target_timeout);
 
 // timer usage
 void sleep(ms10 s);
+
+#endif

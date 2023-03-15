@@ -6,7 +6,7 @@
 
 static unsigned long int next = 1; 
 
-int random(int min, int max);
-void srandByThreeTimestamp(ms10 a, ms10 b, ms10 c);
+int random(signed int min, signed int max);
+void srandByThreeValues(ms10 a, char b, int c);
 
 #endif

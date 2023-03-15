@@ -15,17 +15,33 @@
 #include "hal.h"
 #include "tui_utils.h"
 #include "string.h"
+#include "random.h"
 #include <stdint.h>
 
 #define NUMBEROFROUNDS 10
 #define MINWORDLENGTH 5
 #define MAXWORDLENGHT 18
 
-// TODO: implement random word generation
+static string128* wordList[5];
+static string128 s1,s2,s3,s4,s5;
+
+static void initWordList(){
+	strinit("schifffahrt", &s1);
+	strinit("hausbauverein", &s2);
+	strinit("sternpunkt", &s3);
+	strinit("dreiecksschaltung", &s4);
+	strinit("kernspintomograph", &s5);
+	wordList[0] = &s1;
+	wordList[1] = &s2;
+	wordList[2] = &s3;
+	wordList[3] = &s4;
+	wordList[4] = &s5;
+
+}
 
 static void userInput(string128 *input, int useTimeout)
 {
-	int pressedKeys = 0; // TODO: Implement remvoing chars
+	int pressedKeys = 0; // TODO: Implement removing chars
 	char currentInput;
 	strclear(input);
 
@@ -57,11 +73,31 @@ static void userInput(string128 *input, int useTimeout)
 	sendChar('\r');
 }
 
-static void startWord(string128 *word, string128 *guess, string128 *output)
-{
-	strinit("Please enter your Word: \n\r", output);
+static void getRandomWord(string128 *input, ms10 a, char b, int c){
+	strclear(input);
+	srandByThreeValues(a, b, c);
+	int r = random(0,4);
+	strinit(wordList[r]->content, input);
+	//input = wordList[r];
+	//cstrcopy(wordList[r]->content, input->content);
+}
+
+static void startWord(string128 *word, string128 *guess, string128 *output){
+	strinit("Do you want to take a random word? \n\r Type \'n\' if not or something else if yes. \n\r", output);
 	sendString(output);
-	userInput(word, 0);
+	userInput(word, 1);
+
+	if((word->length == 1 && word->content[0] != 'n') || word->content[0] != '\e'){
+		int l = word->length;
+		initWordList();
+		getRandomWord(word, ticks, word->content[l/2], l);
+		sendString(word);
+	}else{
+		strinit("Please enter your Word: \n\r", output);
+		sendString(output);
+		userInput(word, 0);
+	}
+
 
 	while (MINWORDLENGTH > word->length || word->length > MAXWORDLENGHT)
 	{
