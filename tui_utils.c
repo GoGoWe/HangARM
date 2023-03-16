@@ -1,11 +1,7 @@
+#include <stdint.h>
 #include "tui_utils.h"
-#include "string.h"
 #include "hal.h"
 
-/**
- * @brief pushes the current content out of frame
- * 
- */
 void clearTUI(void)
 {
     static string128 output;
@@ -17,52 +13,24 @@ void clearTUI(void)
     sendString(&output);
 }
 
-// TODO: Change this this way you can print more than one ASCII Art
-//       Additionally the asciiContainer can not be cleared make this
-//       the same way as the String126 struct so that it can be created
-//       with different sizes and reinisilized when the game starts over
-/**
- * @brief converts an asciiart to a string128 array for usage with string library
- * 
- * @param asciiCon 
- * @param buffer 
- * @param asciiArt 
- */
-void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt) {
+void asciiToString(string128 asciiCon[ASCIIHEIGHT], const char *asciiArt) {
 	for(int h = 0; h < ASCIIHEIGHT; h++) {
 		for(int w = 0; w < ASCIIWIDTH; w++) {
 			asciiCon[h].content[w] = asciiArt[h * ASCIIWIDTH + w];
-			buffer[h].content[w] = '\0';
 		}
 		straddChar(&asciiCon[h], '\n');
 		straddChar(&asciiCon[h], '\r');
 		asciiCon[h].length = 40;
-		buffer[h].length = 0;
 	}
 }
 
-/**
- * @brief prints asci art from the bottom
- * 
- * @param asciiCon 
- * @param p 
- */
-void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], int p) {
-	for (int i = p; i >= 0; i--) {
-
-
+void expandAsciiArt(const string128 asciiCon[ASCIIHEIGHT], int p) {
+	for (int i = p; i >= 1; i--) {  // Crazy stuff happens if you replace the 1 with a 0 and choose random words
 		sendString(&asciiCon[ASCIIHEIGHT - i]);
 		//sleep(1);
 	};
 }
 
-/**
- * @brief like pow()
- * 
- * @param base 
- * @param exp 
- * @return int 
- */
 int power(int base, int exp)
 {
     if (exp < 0)
@@ -82,23 +50,11 @@ int power(int base, int exp)
     return result;
 }
 
-/**
- * @brief returns the numeric representation of a number char
- * 
- * @param c 
- * @return int 
- */
 int charDigitToInt(const char c)
 {
     return c - ASCII_NUM_DIS;
 }
 
-/**
- * @brief return the number of digits needed to represent an int as a string
- * 
- * @param n 
- * @return int 
- */
 int getDigitsCount(int n)
 {
     int dc = 0;
@@ -110,12 +66,6 @@ int getDigitsCount(int n)
     return dc;
 }
 
-/**
- * @brief converts a string to a numeric representation
- * 
- * @param s 
- * @return int 
- */
 int stringDigitsToInt(const string128 *s)
 {
     int num = 0;
@@ -132,12 +82,6 @@ int stringDigitsToInt(const string128 *s)
     return num;
 }
 
-/**
- * @brief converts an int to its string representation
- * 
- * @param n 
- * @param s 
- */
 void intToString(int n, string128 *s)
 {
     strclear(s);
@@ -154,4 +98,38 @@ void intToString(int n, string128 *s)
         n = n / 10;
         --len;
     } while (len != 0);
+}
+
+void userInput(string128 *input, int useTimeout)
+{
+	int pressedKeys = 0; // TODO: Implement removing chars
+	char currentInput;
+	strclear(input);
+
+	do
+	{
+		currentInput = readChar(useTimeout);
+		if (currentInput == 18) {
+			straddChar(input, '\e');
+			break;
+		}
+		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
+		{
+			continue;
+			//sendChar('\a');
+		}
+		else if (currentInput < 91)
+		{
+			currentInput += 32;
+			sendChar(currentInput);
+			straddChar(input, currentInput);
+		}
+		else
+		{
+			sendChar(currentInput);
+			straddChar(input, currentInput);
+		}
+	} while ((currentInput != '\r' || input->length == 0) && input->length < 128);
+	sendChar('\n');
+	sendChar('\r');
 }

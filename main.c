@@ -7,7 +7,7 @@
  *
  * @author Lennart Schuster, Gabriel Wuwer, Georg Philip,
  *
- * @brief C Main.
+ * @brief The main logic of the game with some mandatory functions.
  **/
 
 
@@ -25,7 +25,39 @@
 static string128* wordList[5];
 static string128 s1,s2,s3,s4,s5;
 
-static void initWordList(){
+/**
+ * @brief prints user statistic
+ * 
+ * @param fails integer of wrong user inputs
+ * @param digits string128 pointer to contain digits
+ * @param output string128 pointer to contain terminal outputs
+ */
+static void statistics(const int fails, string128 *digits, string128 *output){
+
+	clearTUI();
+	strinit("\n\rNumber of tries: ", output);
+	strcomb(output, digits);
+	sendString(output);
+	strclear(digits);
+
+	strinit("\n\rNumber of fails: ", output);
+	intToString(fails, digits);
+	strcomb(output, digits);
+	sendString(output);
+
+	strclear(output);
+}
+
+/**
+ * @brief Initializes an array of predefined string128 words to guess and pics one random
+ * 		  by taking the time during the input, a char from the input and the length of the input.
+ * 		  Nevertheless the inputs a, b, c can be all sort of integer values to generate the seed.
+ * 
+ * @param a timestamp e.g time passed when user typed a word in
+ * @param b character e.g a character of the word the user typed in
+ * @param c integer number e.g length of inputted word
+ */
+static void getRandomWord(string128 *input, ms10 a, char b, int c){
 	strinit("schifffahrt", &s1);
 	strinit("hausbauverein", &s2);
 	strinit("sternpunkt", &s3);
@@ -37,49 +69,19 @@ static void initWordList(){
 	wordList[3] = &s4;
 	wordList[4] = &s5;
 
-}
-
-static void userInput(string128 *input, int useTimeout)
-{
-	int pressedKeys = 0; // TODO: Implement removing chars
-	char currentInput;
-	strclear(input);
-
-	do
-	{
-		currentInput = readChar(useTimeout);
-		if (currentInput == 18) {
-			straddChar(input, '\e');
-			break;
-		}
-		else if (currentInput < 65 || currentInput > 122 || (currentInput > 90 && currentInput < 97))
-		{
-			continue;
-			//sendChar('\a');
-		}
-		else if (currentInput < 91)
-		{
-			currentInput += 32;
-			sendChar(currentInput);
-			straddChar(input, currentInput);
-		}
-		else
-		{
-			sendChar(currentInput);
-			straddChar(input, currentInput);
-		}
-	} while ((currentInput != '\r' || input->length == 0) && input->length < 128);
-	sendChar('\n');
-	sendChar('\r');
-}
-
-static void getRandomWord(string128 *input, ms10 a, char b, int c){
 	strclear(input);
 	srandByThreeValues(a, b, c);
 	int r = random(0,4);
 	strinit(wordList[r]->content, input);
 }
 
+/**
+ * @brief game logic to choose a start word by the user or randomly
+ * 
+ * @param word string128 pointer to store the word to guess
+ * @param guess string128 pointer to store the characters or string that was guessed
+ * @param output string128 pointer to store the output to the terminal
+ */
 static void startWord(string128 *word, string128 *guess, string128 *output){
 	strinit("\n\rDo you want to take a random word? Type \'n\' if not or something else if yes. \n\r", output);
 	sendString(output);
@@ -91,7 +93,6 @@ static void startWord(string128 *word, string128 *guess, string128 *output){
 		userInput(word, 0);
 	}else{
 		int l = word->length;
-		initWordList();
 		getRandomWord(word, ticks, word->content[l/2], l);
 	}
 
@@ -111,23 +112,14 @@ static void startWord(string128 *word, string128 *guess, string128 *output){
 	}
 }
 
-void statistics(const int fails, string128 *digits, string128 *output){
-
-	clearTUI();
-	strinit("\n\rNumber of tries: ", output);
-	strcomb(output, digits);
-	sendString(output);
-	strclear(digits);
-
-	strinit("\n\rNumber of fails: ", output);
-	intToString(fails, digits);
-	strcomb(output, digits);
-	sendString(output);
-
-	strclear(output);
-}
-
-// returns 1 on won game, 0 on lost game
+/**
+ * @brief main game logic when guessing the word asks the player as long as he did not failed 10 times what his/her guess is
+ * 
+ * @param word string128 pointer to store the word to guess
+ * @param guess string128 pointer to store the characters or string that was guessed
+ * @param output string128 pointer to store the output to the terminal
+ * @return int 1 if won and 0 if lost
+ */
 int guessWord(const string128 *word, string128 *guess, string128 *output)
 {
 	string128 digits, input, pastInputs;
@@ -199,12 +191,12 @@ int guessWord(const string128 *word, string128 *guess, string128 *output)
 		round++;
 		// Output ASCII Art and current guessed word e.g H _ _ g m _ _ 
 		clearTUI();
-		expandAsciArt(asciiContainer, asciiLines);
+		expandAsciiArt(asciiContainer, asciiLines);
 		stradd(output, guess->content);
 		sendString(output);
 	}
 	statistics(10, &digits, output);
-	expandAsciArt(asciiContainer, ASCIIHEIGHT);
+	expandAsciiArt(asciiContainer, ASCIIHEIGHT);
 	return 0;
 }
 
@@ -212,12 +204,15 @@ void main(void)
 {
 	// First time Initialization 
 	static string128 output, word, guess;
-	asciiToString(asciiContainer, asciiBuffer, asciiArt);
+	asciiToString(asciiContainer, asciiArt);
 	timerInit();
 	uartInit();
+
+	// Welcome Message
 	strinit("Welcome to HangARM!", &output);
 	sendString(&output);
 
+	// Infinity Game Loop
 	do{
 		strclear(&output);
 		strclear(&word);
@@ -237,7 +232,7 @@ void main(void)
 		}
 		sendString(&output);
 
-		strinit("\n\rPress a enter if you want to play again\n\r", &output);
+		strinit("\n\rPress enter if you want to play again\n\r", &output);
 		sendString(&output);
 		readChar(0);
 		clearTUI();

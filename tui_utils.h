@@ -1,15 +1,34 @@
+/**
+ * @file
+ * @copyright
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @author Gabriel Wuwer, Lennart Schuster
+ *
+ * @brief Important functions to use the terminal as HMI.
+ **/
+
 #ifndef TUIUTIL_H
 #define TUIUTIL_H
-#include <stdint.h>
+
 #include "string.h"
+
+#define TUIHIGHT 24
 #define ASCII_NUM_DIS 48
 #define ASCIIWIDTH 17
 #define ASCIIHEIGHT 10
-#define TUIHIGHT 24
 #define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
 
-static string128 asciiContainer[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
+/**
+ * string128 Array used as container for ASCII Art 
+*/
+static string128 asciiContainer[ASCIIHEIGHT];
 
+/**
+ * ASCII Art that is printed when failing a guess
+*/
 static char asciiArt[ASCIISIZE] =
 ".      ARM       "
 ".    IS DEAD     "
@@ -22,61 +41,77 @@ static char asciiArt[ASCIISIZE] =
 ". |:::::::::::|\\ "
 ". `-=========-`()";
 
-static char asciiArt2[801] =
-"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
-"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
-"MMMMMMMMMMKXKXXNNWMMMMMMMMMMMMMMMMMMMMMM"
-"MMMMMMMWXd....',:coxk0XXNNWMMMMMMMMMMMMM"
-"MMMMMMMXk'..............,;:ldk0KXXWMMMMM"
-"MMMMMMWOl........................';0MMMM"
-"MMMMMMNO'.....................   ..kXMMM"
-"MMMMMM0o......................  ..:OXMMM"
-"MMMMMXk'......l;.,'...............xONMMM"
-"MMMMM0o.....'kxk.ARM.l,l.''......,kKMMMM"
-"MMMMNO,........;,:ll:Kdk:oo:.....oONMMMM"
-"MMMM0o.................''','....,O0WMMMM"
-"MMMNk'..........................l0XMMMMM"
-"MMM0d... .......................x0WMMMMM"
-"MMMXk..........................cOXMMMMMM"
-"MMMMMXxolc;,'..................kOWMMMMMM"
-"MMMMMWNXXKK00OOkdol:;'........;OKMMMMMMM"
-"MMMMMMMMMMMMMWWNNXKK00OOkdolc:ONWMMMMMMM"
-"MMMMMMMMMMMMMMMMMMMMMMWWNNXXXMMMMMMMMMMM"
-"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM";
 
-static char asciiTitle[800] =
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-"dP                              MMP\"\"\"\"\"\"\"MMMM\"\"\"\"\"\"\"`MMM\"\"\"\"\"`\'\"\"\"`YM   "
-"88                              M' .mmmm  MMMM  mmmm,  MM  mm.  mm.  M   "
-"88d888b..d8888b.88d888b..d8888b.M         `MM'        .MM  MMM  MMM  M   "
-"88'  `8888'  `8888'  `8888'  `88M  MMMMM  MMMM  MMMb. \"MM  MMM  MMM  M   "
-"88    8888.  .8888    8888.  .88M  MMMMM  MMMM  MMMMM  MM  MMM  MMM  M   "
-"dP    dP`88888P8dP    dP`8888P88M  MMMMM  MMMM  MMMMM  MM  MMM  MMM  M   "
-"                             .88MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM   "
-"                         d8888P                                          "
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-
-
+/**
+ * @brief pushes the current content out of frame
+ * 
+ */
 void clearTUI(void);
-void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT], const char *asciiArt);
-void expandAsciArt(const string128 art[ASCIIHEIGHT], int p);
 
+/**
+ * @brief converts an asciiart to a string128 array for usage with string library
+ * 
+ * @param asciiCon A string128 array in which the art should be stored
+ * @param buffer 
+ * @param asciiArt 
+ */
+void asciiToString(string128 asciiCon[ASCIIHEIGHT], const char *asciiArt);
 
-// Converts a char {c} NUMBER to an valid integer
-// unhandeld output if {c} is not a number from 0-9
+/**
+ * @brief Prints asci art from the bottom
+ * 
+ * @param asciiCon A string128 array which contains the art line by line
+ * @param p The value (in lines) up to which the art should be drawn
+ */
+void expandAsciiArt(const string128 art[ASCIIHEIGHT], int p);
+
+/**
+ * @brief Like pow()
+ * 
+ * @param base 
+ * @param exp 
+ * @return int 
+ */
+int power(int base, int exp);
+
+/**
+ * @brief returns the numeric representation of a number char
+ *        unhandled output if c in not a number from 0-9
+ * @param c char to convert
+ * @return int 
+ */
 int charDigitToInt(const char c);
 
-// Converts a string {s} NUMBER to an valid integer
-// the should only have digits or the result will be inaccurat
-int stringDigitsToInt(const string128 *s);
-
-
-// Converts a ONE DIGIT int {n} to an valid char number
-// unhandled output if {n} is not a number from 0-9
-void intToString(int n, string128 *s);
-
+/**
+ * @brief return the number of digits needed to represent an int as a string
+ * 
+ * @param n int to check
+ * @return int 
+ */
 int getDigitsCount(int n);
 
-// {base} power of {exp}
-int power(int base, int exp);
+/**
+ * @brief converts a string to a numeric representation
+ *        unhandled output if the string does not only contain digits
+ * @param s string128 pointer which contains the numbers
+ * @return int 
+ */
+int stringDigitsToInt(const string128 *s);
+
+/**
+ * @brief converts an int to its string representation
+ * 
+ * @param n number as integer which should be converted
+ * @param s string128 pointer to store the characters
+ */
+void intToString(int n, string128 *s);
+
+/**
+ * @brief handles all lowercase latin ascii letters the user inputs into the terminal until he/she presses enter.
+ * 
+ * @param input string128 pointer to store all user inputted characters
+ * @param useTimeout bool if true (1) the input will be 'esc' after 10sec 
+ */
+void userInput(string128 *input, int useTimeout);
+
 #endif

@@ -1,15 +1,19 @@
-HangARM
+# HangARM
+
+An implementation of Hangman for ARM Cortex CPUs.
+
+Repository: https://github.com/GoGoWe/HangARM/commits/master
 
 # Build Instruction
 
-Erstellen des Build:
- - Mittels CMake Presets:
+Create the build:
+ - with CMake presets:
    ```cmake --preset arm-cortex-m4```
- - Klassisch:
+ - classic:
    ```cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=toolchain.cmake```
 
-Bauen:
- - Mittels CMake Presets:
+Build:
+ - with CMake Presets:
   ```cmake --build --preset arm-cortex-m4```
- - Klassisch:
+ - classic:
    ```cmake --build build```
