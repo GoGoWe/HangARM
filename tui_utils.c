@@ -30,9 +30,12 @@ void asciiToString(string128 asciiCon[ASCIIHEIGHT], string128 buffer[ASCIIHEIGHT
 	}
 }
 
+//                                                            2
 void expandAsciArt(const string128 asciiCon[ASCIIHEIGHT], int p) {
-	for (int i = p; i > 0; i--) {
-		sendString(&asciiCon[i]);
+	for (int i = p; i >= 0; i--) {
+
+
+		sendString(&asciiCon[ASCIIHEIGHT - i]);
 		//sleep(1);
 	};
 }

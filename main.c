@@ -78,24 +78,21 @@ static void getRandomWord(string128 *input, ms10 a, char b, int c){
 	srandByThreeValues(a, b, c);
 	int r = random(0,4);
 	strinit(wordList[r]->content, input);
-	//input = wordList[r];
-	//cstrcopy(wordList[r]->content, input->content);
 }
 
 static void startWord(string128 *word, string128 *guess, string128 *output){
-	strinit("Do you want to take a random word? \n\r Type \'n\' if not or something else if yes. \n\r", output);
+	strinit("\n\rDo you want to take a random word? Type \'n\' if not or something else if yes. \n\r", output);
 	sendString(output);
 	userInput(word, 1);
 
-	if((word->length == 1 && word->content[0] != 'n') || word->content[0] != '\e'){
-		int l = word->length;
-		initWordList();
-		getRandomWord(word, ticks, word->content[l/2], l);
-		sendString(word);
-	}else{
+	if((word->length == 1 && word->content[0] == 'n') || word->content[0] == '\e'){
 		strinit("Please enter your Word: \n\r", output);
 		sendString(output);
 		userInput(word, 0);
+	}else{
+		int l = word->length;
+		initWordList();
+		getRandomWord(word, ticks, word->content[l/2], l);
 	}
 
 

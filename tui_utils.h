@@ -3,14 +3,26 @@
 #include <stdint.h>
 #include "string.h"
 #define ASCII_NUM_DIS 48
-#define ASCIIWIDTH 40
-#define ASCIIHEIGHT 20
+#define ASCIIWIDTH 17
+#define ASCIIHEIGHT 10
 #define TUIHIGHT 24
 #define ASCIISIZE (ASCIIHEIGHT * ASCIIWIDTH + 1)
 
 static string128 asciiContainer[ASCIIHEIGHT], asciiBuffer[ASCIIHEIGHT];
 
 static char asciiArt[ASCIISIZE] =
+".      ARM       "
+".    IS DEAD     "
+".    _______     "
+".   |.-----.|    "
+".   ||x . x||    "
+".   ||_.-._||    "
+".   `--)-(--`    "
+".  __[=== o]___  "
+". |:::::::::::|\\ "
+". `-=========-`()";
+
+static char asciiArt2[801] =
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
 "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
 "MMMMMMMMMMKXKXXNNWMMMMMMMMMMMMMMMMMMMMMM"
